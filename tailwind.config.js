@@ -1,11 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-<<<<<<< HEAD
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
-  theme: {
-=======
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -23,7 +17,6 @@ module.exports = {
         "2xl": "1400px",
       },
     },
->>>>>>> tailwind
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -65,12 +58,6 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-<<<<<<< HEAD
-    },
-  },
-  plugins: [],
-} 
-=======
       keyframes: {
         "accordion-down": {
           from: { height: 0 },
@@ -89,5 +76,3 @@ module.exports = {
   },
   plugins: [require("tailwindcss-animate")],
 }
-
->>>>>>> tailwind
