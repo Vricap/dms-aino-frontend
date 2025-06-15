@@ -16,7 +16,7 @@ function App() {
     <Router>
       <div className="app">
         <Header />
-        <div className="main-content">
+        <div className="main-content bg-black">
           <Sidebar />
           <main className="content">
             <Routes>
