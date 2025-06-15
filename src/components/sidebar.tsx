@@ -1,7 +1,15 @@
-import React from 'react';
-import { Link, useLocation } from "react-router-dom"
-import { cn } from "../lib/utils.ts"
-import { FileText, FileSignature, Users, Settings, LayoutDashboard, FolderOpen, History } from "lucide-react"
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { cn } from "../lib/utils.ts";
+import {
+  FileText,
+  FileSignature,
+  Users,
+  Settings,
+  LayoutDashboard,
+  FolderOpen,
+  History,
+} from "lucide-react";
 
 const sidebarItems = [
   {
@@ -19,30 +27,30 @@ const sidebarItems = [
     href: "/signatures",
     icon: FileSignature,
   },
-  {
-    title: "Templates",
-    href: "/templates",
-    icon: FolderOpen,
-  },
+  // {
+  //   title: "Templates",
+  //   href: "/templates",
+  //   icon: FolderOpen,
+  // },
   {
     title: "Audit Trail",
     href: "/audit",
     icon: History,
   },
-  {
-    title: "Users",
-    href: "/users",
-    icon: Users,
-  },
-  {
-    title: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
-]
+  // {
+  //   title: "Users",
+  //   href: "/users",
+  //   icon: Users,
+  // },
+  // {
+  //   title: "Settings",
+  //   href: "/settings",
+  //   icon: Settings,
+  // },
+];
 
 export function Sidebar() {
-  const location = useLocation()
+  const location = useLocation();
 
   return (
     <div className="hidden border-r bg-background md:block w-64">
@@ -54,7 +62,9 @@ export function Sidebar() {
               to={item.href}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                location.pathname === item.href ? "bg-accent text-accent-foreground" : "transparent",
+                location.pathname === item.href
+                  ? "bg-accent text-accent-foreground"
+                  : "transparent",
               )}
             >
               <item.icon className="h-5 w-5" />
@@ -64,6 +74,5 @@ export function Sidebar() {
         </nav>
       </div>
     </div>
-  )
+  );
 }
-
