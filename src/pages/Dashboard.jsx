@@ -1,21 +1,21 @@
-import { Button } from "../components/ui/button.tsx";
+import { Button } from "../components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../components/ui/card.tsx";
+} from "../components/ui/card";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../components/ui/tabs.tsx";
-import { FileUploadArea } from "../components/file-upload-area.tsx";
-import { RecentDocuments } from "../components/recent-documents.tsx";
-import { PendingSignatures } from "../components/pending-signatures.tsx";
-import { DashboardStats } from "../components/dashboard-stats.tsx";
+} from "../components/ui/tabs";
+import { FileUploadArea } from "../components/file-upload-area";
+import { RecentDocuments } from "../components/recent-documents";
+import { PendingSignatures } from "../components/pending-signatures";
+import { DashboardStats } from "../components/dashboard-stats";
 import { FileText, FileSignature, Clock, Search } from "lucide-react";
 
 export default function Dashboard() {

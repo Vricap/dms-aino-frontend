@@ -1,15 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Header } from "./components/header.tsx";
-import { Sidebar } from "./components/sidebar.tsx";
+import { Header } from "./components/header";
+import { Sidebar } from "./components/sidebar";
 
 import "./styles/globals.css";
 
 // Import pages
-import Dashboard from "./pages/Dashboard.tsx";
-import Documents from "./pages/Documents.tsx";
-import Signatures from "./pages/Signatures.tsx";
-import Audit from "./pages/Audit.tsx";
+import Dashboard from "./pages/Dashboard";
+import Documents from "./pages/Documents";
+import Signatures from "./pages/Signatures";
+import Audit from "./pages/Audit";
 
 function App() {
   return (

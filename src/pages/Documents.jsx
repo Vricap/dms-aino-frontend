@@ -1,5 +1,5 @@
-import { Button } from "../components/ui/button.tsx";
-import { Input } from "../components/ui/input.tsx";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import {
   Table,
   TableBody,
@@ -7,14 +7,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../components/ui/table.tsx";
+} from "../components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu.tsx";
-import { Badge } from "../components/ui/badge.tsx";
+} from "../components/ui/dropdown-menu";
+import { Badge } from "../components/ui/badge";
 import {
   FileText,
   FileSignature,

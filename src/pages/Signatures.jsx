@@ -1,24 +1,24 @@
-import { Button } from "../components/ui/button.tsx";
-import { Input } from "../components/ui/input.tsx";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../components/ui/tabs.tsx";
+} from "../components/ui/tabs";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../components/ui/card.tsx";
-import { Badge } from "../components/ui/badge.tsx";
+} from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../components/ui/avatar.tsx";
+} from "../components/ui/avatar";
 import {
   FileSignature,
   Clock,
