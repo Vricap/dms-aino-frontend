@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {
@@ -27,6 +28,12 @@ import {
   Filter,
 } from "lucide-react";
 
+const documents = await axios
+  .get("http://localhost:8000/documents") // replace with your API URL
+  .then((res) => {
+    return res.data;
+  });
+
 export default function Documents() {
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
@@ -52,53 +59,53 @@ export default function Documents() {
               <Filter className="h-4 w-4" />
             </Button>
           </div>
-          <Button className="w-full md:w-auto">
+          {/* <Button className="w-full md:w-auto">
             <Plus className="mr-2 h-4 w-4" /> Upload Document
-          </Button>
+          </Button> */}
         </div>
 
         <div className="rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
+                <TableHead>Title</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Division</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Date Modified</TableHead>
-                <TableHead>Size</TableHead>
+                <TableHead>Date Uploaded</TableHead>
                 <TableHead className="w-[70px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {documents.map((document) => (
-                <TableRow key={document.id}>
+              {documents.rows.map((document) => (
+                <TableRow key={document._id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      {document.status === "Signed" ? (
+                      {/* {document.status === "Signed" ? (
                         <FileSignature className="h-5 w-5 text-primary" />
                       ) : (
-                        <FileText className="h-5 w-5 text-primary" />
-                      )}
-                      <span className="font-medium">{document.name}</span>
+                      )} */}
+                      <FileText className="h-5 w-5 text-primary" />
+                      <span className="font-medium">{document.title}</span>
                     </div>
                   </TableCell>
                   <TableCell>
                     <Badge
                       variant={
-                        document.status === "Signed"
+                        document.status === "saved"
                           ? "success"
-                          : document.status === "Pending"
+                          : document.status === "sent"
                             ? "warning"
-                            : document.status === "Draft"
+                            : document.status === "completed"
                               ? "outline"
                               : "secondary"
                       }
                       className={
-                        document.status === "Signed"
+                        document.status === "saved"
                           ? "bg-green-500/10 text-green-500 hover:bg-green-500/20 hover:text-green-600"
-                          : document.status === "Pending"
+                          : document.status === "sent"
                             ? "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 hover:text-yellow-600"
-                            : document.status === "Draft"
+                            : document.status === "completed"
                               ? "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20 hover:text-gray-600"
                               : ""
                       }
@@ -106,9 +113,9 @@ export default function Documents() {
                       {document.status}
                     </Badge>
                   </TableCell>
+                  <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
-                  <TableCell>{document.date}</TableCell>
-                  <TableCell>{document.size}</TableCell>
+                  <TableCell>{document.createdAt}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -142,62 +149,3 @@ export default function Documents() {
     </main>
   );
 }
-
-const documents = [
-  {
-    id: 1,
-    name: "Contract Agreement.pdf",
-    type: "PDF",
-    status: "Signed",
-    date: "Today, 10:30 AM",
-    size: "1.2 MB",
-  },
-  {
-    id: 2,
-    name: "Project Proposal.docx",
-    type: "DOCX",
-    status: "Pending",
-    date: "Yesterday, 3:45 PM",
-    size: "845 KB",
-  },
-  {
-    id: 3,
-    name: "Financial Report.xlsx",
-    type: "XLSX",
-    status: "Viewed",
-    date: "Mar 22, 2023",
-    size: "2.1 MB",
-  },
-  {
-    id: 4,
-    name: "Meeting Minutes.pdf",
-    type: "PDF",
-    status: "Draft",
-    date: "Mar 20, 2023",
-    size: "567 KB",
-  },
-  {
-    id: 5,
-    name: "Marketing Plan.pptx",
-    type: "PPTX",
-    status: "Signed",
-    date: "Mar 15, 2023",
-    size: "3.4 MB",
-  },
-  {
-    id: 6,
-    name: "Employee Handbook.pdf",
-    type: "PDF",
-    status: "Signed",
-    date: "Mar 10, 2023",
-    size: "4.2 MB",
-  },
-  {
-    id: 7,
-    name: "Product Roadmap.docx",
-    type: "DOCX",
-    status: "Pending",
-    date: "Mar 5, 2023",
-    size: "1.1 MB",
-  },
-];
