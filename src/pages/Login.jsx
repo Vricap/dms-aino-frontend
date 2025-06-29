@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../lib/axios";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -12,28 +13,32 @@ const Login = () => {
     e.preventDefault();
     setError("");
 
-    // Basic validation
-    if (!email || !password) {
+    if (!username || !password) {
       setError("Please fill in all fields");
       return;
     }
 
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      setError("Please enter a valid email address");
-      return;
-    }
+    // if (!/\S+@\S+\.\S+/.test(email)) {
+    //   setError("Please enter a valid email address");
+    //   return;
+    // }
 
     setIsLoading(true);
 
     try {
-      // Here you would typically make an API call to your backend
-      // For demonstration, we'll simulate a successful login after 1 second
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await axios.post("/users/login", { username, password });
 
-      // On successful login, redirect to dashboard or home page
-      navigate("/dashboard");
+      const token = response.data.token;
+      if (token) {
+        localStorage.setItem("token", token);
+        navigate("/dashboard");
+      } else {
+        setError("Token not found in response");
+      }
     } catch (err) {
-      setError("Invalid email or password");
+      const message =
+        err.response?.data?.message || "Invalid username or password";
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -59,19 +64,19 @@ const Login = () => {
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="email-address" className="sr-only">
-                Email address
+              <label htmlFor="username" className="sr-only">
+                Username
               </label>
               <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
+                id="username"
+                name="username"
+                type="username"
+                autoComplete="username"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div>
@@ -109,6 +114,7 @@ const Login = () => {
             </div>
 
             <div className="text-sm">
+              {/* TODO: Implement forgot password*/}
               <a
                 href="#"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
