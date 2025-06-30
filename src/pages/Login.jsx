@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "../lib/axios";
+import axios from "axios";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -26,7 +26,13 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("/users/login", { username, password });
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/users/login`,
+        {
+          username,
+          password,
+        },
+      );
 
       const token = response.data.token;
       if (token) {

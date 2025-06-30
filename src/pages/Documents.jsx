@@ -37,11 +37,14 @@ export default function Documents() {
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/documents", {
-          headers: {
-            "x-access-token": localStorage.getItem("token"),
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/documents`,
+          {
+            headers: {
+              "x-access-token": localStorage.getItem("token"),
+            },
           },
-        });
+        );
         setDocuments(response.data);
       } catch (err) {
         setError(`Failed to load documents. You may not be logged in. ${err}`);
