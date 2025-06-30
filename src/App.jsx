@@ -21,7 +21,7 @@ function App() {
           <Sidebar />
           <main className="content w-full">
             <Routes>
-              <Route path="/Login" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/documents" element={<Documents />} />

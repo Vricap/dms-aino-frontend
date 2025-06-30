@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -28,13 +29,38 @@ import {
   Filter,
 } from "lucide-react";
 
-const documents = await axios
-  .get("http://localhost:8000/documents") // replace with your API URL
-  .then((res) => {
-    return res.data;
-  });
-
 export default function Documents() {
+  const [documents, setDocuments] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/documents", {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        });
+        setDocuments(response.data);
+      } catch (err) {
+        setError(`Failed to load documents. You may not be logged in. ${err}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDocuments();
+  }, []);
+
+  if (loading) {
+    return <p className="p-4">Loading documents...</p>;
+  }
+
+  if (error) {
+    return <p className="p-4 text-red-500">{error}</p>;
+  }
+
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
       <div className="flex flex-col gap-6">
@@ -59,9 +85,6 @@ export default function Documents() {
               <Filter className="h-4 w-4" />
             </Button>
           </div>
-          {/* <Button className="w-full md:w-auto">
-            <Plus className="mr-2 h-4 w-4" /> Upload Document
-          </Button> */}
         </div>
 
         <div className="rounded-md border">
@@ -81,10 +104,6 @@ export default function Documents() {
                 <TableRow key={document._id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      {/* {document.status === "Signed" ? (
-                        <FileSignature className="h-5 w-5 text-primary" />
-                      ) : (
-                      )} */}
                       <FileText className="h-5 w-5 text-primary" />
                       <span className="font-medium">{document.title}</span>
                     </div>
