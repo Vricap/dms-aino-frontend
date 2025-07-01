@@ -1,5 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 import { Header } from "./components/header.jsx";
 import { Sidebar } from "./components/sidebar.jsx";
 

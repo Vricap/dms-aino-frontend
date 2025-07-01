@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { ThemeProvider } from "./theme-provider";
@@ -17,8 +17,31 @@ import { useNavigate } from "react-router-dom";
 
 export function Header() {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkToken = () => {
+      const token = localStorage.getItem("token");
+      setIsLoggedIn(!!token);
+    };
+
+    checkToken();
+
+    // Listen for changes (even from other tabs)
+    window.addEventListener("storage", checkToken);
+
+    // Optional: poll for changes in the same tab
+    const interval = setInterval(checkToken, 1000);
+
+    return () => {
+      window.removeEventListener("storage", checkToken);
+      clearInterval(interval);
+    };
+  }, []);
+
   function handleLogout() {
     localStorage.removeItem("token");
+    setIsLoggedIn(false);
     navigate("/login");
   }
 
@@ -37,43 +60,53 @@ export function Header() {
           <ThemeProvider>
             <ModeToggle />
           </ThemeProvider>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage
-                    src="/placeholder.svg?height=32&width=32"
-                    alt="User"
-                  />
-                  <AvatarFallback>AI</AvatarFallback>
-                </Avatar>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">Admin User</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    admin@aino.id
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogOut className="mr-2 h-4 w-4" />
-                <button onClick={handleLogout}>Log out</button>on
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+
+          {isLoggedIn ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 rounded-full"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src="/placeholder.svg?height=32&width=32"
+                      alt="User"
+                    />
+                    <AvatarFallback>AI</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      Admin User
+                    </p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      admin@aino.id
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button onClick={() => navigate("/login")}>Login</Button>
+          )}
         </div>
       </div>
     </header>

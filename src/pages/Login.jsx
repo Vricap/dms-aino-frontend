@@ -18,11 +18,6 @@ const Login = () => {
       return;
     }
 
-    // if (!/\S+@\S+\.\S+/.test(email)) {
-    //   setError("Please enter a valid email address");
-    //   return;
-    // }
-
     setIsLoading(true);
 
     try {
