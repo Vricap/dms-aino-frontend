@@ -18,11 +18,19 @@ import { useNavigate } from "react-router-dom";
 export function Header() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     const checkToken = () => {
       const token = localStorage.getItem("token");
       setIsLoggedIn(!!token);
+      if (token) {
+        setUserName(localStorage.getItem("username"));
+        setEmail(localStorage.getItem("email"));
+        setRole(localStorage.getItem("role"));
+      }
     };
 
     checkToken();
@@ -41,6 +49,9 @@ export function Header() {
 
   function handleLogout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+    localStorage.removeItem("role");
     setIsLoggedIn(false);
     navigate("/login");
   }
@@ -81,10 +92,13 @@ export function Header() {
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">
-                      Admin User
+                      Role {role}
+                    </p>
+                    <p className="text-sm font-medium leading-none">
+                      {username}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      admin@aino.id
+                      {email}
                     </p>
                   </div>
                 </DropdownMenuLabel>

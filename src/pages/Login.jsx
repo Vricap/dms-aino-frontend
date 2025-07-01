@@ -32,6 +32,9 @@ const Login = () => {
       const token = response.data.token;
       if (token) {
         localStorage.setItem("token", token);
+        localStorage.setItem("username", response.data.user.username);
+        localStorage.setItem("email", response.data.user.email);
+        localStorage.setItem("role", response.data.user.role);
         navigate("/dashboard");
       } else {
         setError("Token not found in response");
