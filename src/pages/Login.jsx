@@ -40,9 +40,7 @@ const Login = () => {
         setError("Token not found in response");
       }
     } catch (err) {
-      const message =
-        err.response?.data?.message || "Invalid username or password";
-      setError(message);
+      setError(`Failed to login: ${err}`);
     } finally {
       setIsLoading(false);
     }
