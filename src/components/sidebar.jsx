@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   FolderOpen,
   History,
+  UploadIcon,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -16,6 +17,11 @@ const sidebarItems = [
     title: "Dashboard",
     href: "/",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Upload",
+    href: "/upload",
+    icon: UploadIcon,
   },
   {
     title: "Documents",
