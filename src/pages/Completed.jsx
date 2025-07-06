@@ -68,8 +68,10 @@ export default function Documents() {
     <main className="container mx-auto py-6 px-4 md:px-6">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight">Documents</h1>
-          <p className="text-muted-foreground">Documents you just upload</p>
+          <h1 className="text-3xl font-bold tracking-tight">Completed</h1>
+          <p className="text-muted-foreground">
+            Documents that has been signed
+          </p>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 justify-between">

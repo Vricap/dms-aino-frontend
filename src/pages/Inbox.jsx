@@ -38,7 +38,7 @@ export default function Documents() {
     const fetchDocuments = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/documents`,
+          `${process.env.REACT_APP_BASE_URL}/documents/inbox`,
           {
             headers: {
               "x-access-token": localStorage.getItem("token"),
@@ -68,8 +68,10 @@ export default function Documents() {
     <main className="container mx-auto py-6 px-4 md:px-6">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight">Documents</h1>
-          <p className="text-muted-foreground">Documents you just upload</p>
+          <h1 className="text-3xl font-bold tracking-tight">Inbox</h1>
+          <p className="text-muted-foreground">
+            Documents that was sent to you
+          </p>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 justify-between">

@@ -10,6 +10,7 @@ import {
   FolderOpen,
   History,
   UploadIcon,
+  FileCheck,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -29,20 +30,25 @@ const sidebarItems = [
     icon: FileText,
   },
   {
-    title: "Signatures",
-    href: "/signatures",
-    icon: FileSignature,
+    title: "Inbox",
+    href: "/inbox",
+    icon: FolderOpen,
+  },
+  {
+    title: "Completed",
+    href: "/completed",
+    icon: FileCheck,
   },
   // {
-  //   title: "Templates",
-  //   href: "/templates",
-  //   icon: FolderOpen,
+  //   title: "Signatures",
+  //   href: "/signatures",
+  //   icon: FileSignature,
   // },
-  {
-    title: "Audit Trail",
-    href: "/audit",
-    icon: History,
-  },
+  // {
+  //   title: "Audit Trail",
+  //   href: "/audit",
+  //   icon: History,
+  // },
   // {
   //   title: "Users",
   //   href: "/users",

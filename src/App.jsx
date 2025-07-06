@@ -10,8 +10,10 @@ import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Upload from "./pages/Upload.jsx";
 import Documents from "./pages/Documents.jsx";
-import Signatures from "./pages/Signatures.jsx";
-import Audit from "./pages/Audit.jsx";
+import Inbox from "./pages/Inbox.jsx";
+import Completed from "./pages/Completed.jsx";
+// import Signatures from "./pages/Signatures.jsx";
+// import Audit from "./pages/Audit.jsx";
 
 function App() {
   return (
@@ -27,8 +29,10 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/upload" element={<Upload />} />
               <Route path="/documents" element={<Documents />} />
-              <Route path="/signatures" element={<Signatures />} />
-              <Route path="/audit" element={<Audit />} />
+              <Route path="/inbox" element={<Inbox />} />
+              <Route path="/completed" element={<Completed />} />
+              {/* <Route path="/signatures" element={<Signatures />} /> */}
+              {/* <Route path="/audit" element={<Audit />} /> */}
             </Routes>
           </main>
         </div>
