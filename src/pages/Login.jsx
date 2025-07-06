@@ -40,7 +40,8 @@ const Login = () => {
         setError("Token not found in response");
       }
     } catch (err) {
-      setError(`Failed to login: ${err}`);
+      const msg = err.response?.data?.message || err;
+      setError(`Failed to login: ${msg}`);
     } finally {
       setIsLoading(false);
     }
