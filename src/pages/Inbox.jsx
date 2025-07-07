@@ -98,7 +98,7 @@ export default function Documents() {
                 <TableHead>Status</TableHead>
                 <TableHead>Division</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Date Uploaded</TableHead>
+                <TableHead>Date Sent</TableHead>
                 <TableHead className="w-[70px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -137,7 +137,12 @@ export default function Documents() {
                   </TableCell>
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
-                  <TableCell>{document.createdAt}</TableCell>
+                  {/* TODO: receiver is an array with multiple user inside */}
+                  {document.receiver.map((v, index) => (
+                    <TableCell key={index}>
+                      {v.user === localStorage.getItem("id") ? v.date : "N/A"}
+                    </TableCell>
+                  ))}
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
