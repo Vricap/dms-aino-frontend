@@ -38,7 +38,7 @@ export default function Documents() {
     const fetchDocuments = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/documents`,
+          `${process.env.REACT_APP_BASE_URL}/documents/?status=saved,sent`,
           {
             headers: {
               "x-access-token": localStorage.getItem("token"),

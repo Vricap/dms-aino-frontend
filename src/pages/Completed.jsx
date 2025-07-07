@@ -38,7 +38,7 @@ export default function Documents() {
     const fetchDocuments = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/documents`,
+          `${process.env.REACT_APP_BASE_URL}/documents/?status=complete`,
           {
             headers: {
               "x-access-token": localStorage.getItem("token"),
@@ -98,7 +98,7 @@ export default function Documents() {
                 <TableHead>Status</TableHead>
                 <TableHead>Division</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Date Uploaded</TableHead>
+                <TableHead>Date Signed</TableHead>
                 <TableHead className="w-[70px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -137,7 +137,14 @@ export default function Documents() {
                   </TableCell>
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
-                  <TableCell>{document.createdAt}</TableCell>
+                  {/* TODO: problem with this is that if we are not receiver but we are admin, it will display N/A cuz admin has previledge to see all documents regardless if we are the receiver or not */}
+                  {document.receiver.map((v) => (
+                    <TableCell>
+                      {v.user === localStorage.getItem("id")
+                        ? v.dateSigned
+                        : "N/A"}
+                    </TableCell>
+                  ))}
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

@@ -95,7 +95,7 @@ export default function Documents() {
             <TableHeader>
               <TableRow>
                 <TableHead>Title</TableHead>
-                <TableHead>Status</TableHead>
+                {/* <TableHead>Status</TableHead> */}
                 <TableHead>Division</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Date Sent</TableHead>
@@ -111,7 +111,7 @@ export default function Documents() {
                       <span className="font-medium">{document.title}</span>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <Badge
                       variant={
                         document.status === "saved"
@@ -134,13 +134,15 @@ export default function Documents() {
                     >
                       {document.status}
                     </Badge>
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
-                  {/* TODO: receiver is an array with multiple user inside */}
-                  {document.receiver.map((v, index) => (
-                    <TableCell key={index}>
-                      {v.user === localStorage.getItem("id") ? v.date : "N/A"}
+                  {/* TODO: problem with this is that if we are not receiver but we are admin, it will display N/A cuz admin has previledge to see all documents regardless if we are the receiver or not */}
+                  {document.receiver.map((v) => (
+                    <TableCell>
+                      {v.user === localStorage.getItem("id")
+                        ? v.dateSent
+                        : "N/A"}
                     </TableCell>
                   ))}
                   <TableCell>
