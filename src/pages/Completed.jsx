@@ -70,7 +70,10 @@ export default function Documents() {
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Completed</h1>
           <p className="text-muted-foreground">
-            Documents that has been signed
+            Dokumen yang sudah di tanda tangani.{" "}
+            {localStorage.getItem("role") === "admin"
+              ? "Role kamu adalah Admin. Kamu dapat melihat semua dokumen yang 'complete' dari semua user."
+              : ""}
           </p>
         </div>
 
@@ -137,13 +140,8 @@ export default function Documents() {
                   </TableCell>
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
-                  {/* TODO: problem with this is that if we are not receiver but we are admin, it will display N/A cuz admin has previledge to see all documents regardless if we are the receiver or not */}
                   {document.receiver.map((v) => (
-                    <TableCell>
-                      {v.user === localStorage.getItem("id")
-                        ? v.dateSigned
-                        : "N/A"}
-                    </TableCell>
+                    <TableCell>{v.dateSigned}</TableCell>
                   ))}
                   <TableCell>
                     <DropdownMenu>

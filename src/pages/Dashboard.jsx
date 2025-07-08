@@ -27,7 +27,7 @@ export default function Dashboard() {
             Document Management System
           </h1>
           <p className="text-muted-foreground">
-            Manage, sign, and track your documents in one secure platform
+            Platform untuk memanajemen, tanda tangan dan track dokumen PT. AINO.
           </p>
         </div>
 

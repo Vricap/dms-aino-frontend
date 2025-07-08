@@ -69,7 +69,12 @@ export default function Documents() {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Documents</h1>
-          <p className="text-muted-foreground">Documents you just upload</p>
+          <p className="text-muted-foreground">
+            Dokumen yang baru saja kamu upload.{" "}
+            {localStorage.getItem("role") === "admin"
+              ? "Role kamu adalah Admin. Kamu dapat melihat semua dokumen yang 'saved' dan 'sent' dari semua user."
+              : ""}
+          </p>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 justify-between">

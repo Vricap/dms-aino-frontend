@@ -94,11 +94,11 @@ const Upload = () => {
     <main className="container mx-auto py-6 px-4 md:px-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Upload</h1>
-        <p className="text-muted-foreground">Upload your documents</p>
+        <p className="text-muted-foreground">Upload dokumenmu.</p>
       </div>
 
       <div className="max-w-md mx-auto mt-10 p-6 bg-white text-gray-900 shadow rounded">
-        <h2 className="text-2xl font-bold mb-4">Upload Form</h2>
+        <h2 className="text-2xl font-bold mb-4">Form Upload</h2>
 
         {error && (
           <div className="mb-4 text-red-600 border border-red-400 bg-red-100 p-2 rounded">

@@ -46,6 +46,7 @@ export default function Documents() {
           },
         );
         setDocuments(response.data);
+        console.log(response.data);
       } catch (err) {
         setError(`Failed to load documents. You may not be logged in. ${err}`);
       } finally {
@@ -70,7 +71,7 @@ export default function Documents() {
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Inbox</h1>
           <p className="text-muted-foreground">
-            Documents that was sent to you
+            Dokumen yang dikirim kepadamu.
           </p>
         </div>
 
@@ -137,13 +138,8 @@ export default function Documents() {
                   </TableCell> */}
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
-                  {/* TODO: problem with this is that if we are not receiver but we are admin, it will display N/A cuz admin has previledge to see all documents regardless if we are the receiver or not */}
                   {document.receiver.map((v) => (
-                    <TableCell>
-                      {v.user === localStorage.getItem("id")
-                        ? v.dateSent
-                        : "N/A"}
-                    </TableCell>
+                    <TableCell>{v.dateSent}</TableCell>
                   ))}
                   <TableCell>
                     <DropdownMenu>
