@@ -19,13 +19,13 @@ import {
 import { Badge } from "../components/ui/badge";
 import {
   FileText,
-  FileSignature,
+  // FileSignature,
   MoreHorizontal,
   Download,
   Share,
   Trash,
   Search,
-  Plus,
+  // Plus,
   Filter,
 } from "lucide-react";
 
@@ -68,7 +68,7 @@ export default function Documents() {
     <main className="container mx-auto py-6 px-4 md:px-6">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight">Documents</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Draft</h1>
           <p className="text-muted-foreground">
             Dokumen yang baru saja kamu upload.{" "}
             {localStorage.getItem("role") === "admin"

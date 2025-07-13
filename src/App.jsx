@@ -9,7 +9,7 @@ import "./styles/globals.css";
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Upload from "./pages/Upload.jsx";
-import Documents from "./pages/Documents.jsx";
+import Draft from "./pages/Draft.jsx";
 import Inbox from "./pages/Inbox.jsx";
 import Completed from "./pages/Completed.jsx";
 // import Signatures from "./pages/Signatures.jsx";
@@ -28,7 +28,7 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/upload" element={<Upload />} />
-              <Route path="/documents" element={<Documents />} />
+              <Route path="/draft" element={<Draft />} />
               <Route path="/inbox" element={<Inbox />} />
               <Route path="/completed" element={<Completed />} />
               {/* <Route path="/signatures" element={<Signatures />} /> */}

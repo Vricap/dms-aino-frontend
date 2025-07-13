@@ -3,12 +3,12 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "../lib/utils";
 import {
   FileText,
-  FileSignature,
-  Users,
-  Settings,
+  // FileSignature,
+  // Users,
+  // Settings,
   LayoutDashboard,
   FolderOpen,
-  History,
+  // History,
   UploadIcon,
   FileCheck,
 } from "lucide-react";
@@ -25,8 +25,8 @@ const sidebarItems = [
     icon: UploadIcon,
   },
   {
-    title: "Documents",
-    href: "/documents",
+    title: "Draft",
+    href: "/draft",
     icon: FileText,
   },
   {

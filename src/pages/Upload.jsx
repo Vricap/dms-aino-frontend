@@ -82,7 +82,7 @@ const Upload = () => {
         },
       );
 
-      navigate("/documents");
+      navigate("/draft");
     } catch (err) {
       setError(`Upload failed: ${err}`);
     } finally {
