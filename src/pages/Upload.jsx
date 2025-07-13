@@ -42,12 +42,12 @@ const types = [
   "CL",
 ];
 
-const divisions = ["MKT", "FIN", "CHC", "PROD", "OPS", "ITINFRA", "LGL", "DIR"];
+// const divisions = ["MKT", "FIN", "CHC", "PROD", "OPS", "ITINFRA", "LGL", "DIR"];
 
 const Upload = () => {
   const [file, setFile] = useState(null);
   const [type, setType] = useState("");
-  const [division, setDivision] = useState("");
+  // const [division, setDivision] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +57,7 @@ const Upload = () => {
     e.preventDefault();
     setError("");
 
-    if (!file || !type || !division || !description) {
+    if (!file || !type || !description) {
       setError("Please fill in all fields");
       return;
     }
@@ -65,7 +65,7 @@ const Upload = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("type", type);
-    formData.append("division", division);
+    // formData.append("division", division);
     formData.append("content", description);
 
     setIsLoading(true);
@@ -138,7 +138,7 @@ const Upload = () => {
           </div>
 
           {/* Division */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block mb-1 font-medium">Division</label>
             <select
               value={division}
@@ -153,7 +153,7 @@ const Upload = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
 
           {/* Description */}
           <div className="mb-4">

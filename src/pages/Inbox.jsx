@@ -16,16 +16,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
-import { Badge } from "../components/ui/badge";
+// import { Badge } from "../components/ui/badge";
 import {
   FileText,
-  FileSignature,
+  // FileSignature,
   MoreHorizontal,
   Download,
   Share,
   Trash,
   Search,
-  Plus,
+  // Plus,
   Filter,
 } from "lucide-react";
 
@@ -46,7 +46,6 @@ export default function Documents() {
           },
         );
         setDocuments(response.data);
-        console.log(response.data);
       } catch (err) {
         setError(`Failed to load documents. You may not be logged in. ${err}`);
       } finally {
