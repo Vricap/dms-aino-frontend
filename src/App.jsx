@@ -14,6 +14,7 @@ import Inbox from "./pages/Inbox.jsx";
 import Completed from "./pages/Completed.jsx";
 // import Signatures from "./pages/Signatures.jsx";
 // import Audit from "./pages/Audit.jsx";
+import Sent from "./pages/Sent.jsx";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="/completed" element={<Completed />} />
               {/* <Route path="/signatures" element={<Signatures />} /> */}
               {/* <Route path="/audit" element={<Audit />} /> */}
+              <Route path="/sent" element={<Sent />} />
             </Routes>
           </main>
         </div>

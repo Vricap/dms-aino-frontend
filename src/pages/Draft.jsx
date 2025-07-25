@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -21,7 +22,7 @@ import {
   FileText,
   // FileSignature,
   MoreHorizontal,
-  Download,
+  // Download,
   Share,
   Trash,
   Search,
@@ -33,6 +34,11 @@ export default function Documents() {
   const [documents, setDocuments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSent = (id, title) => {
+    navigate("/sent", { state: { id: id, title: title } });
+  };
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -150,13 +156,17 @@ export default function Documents() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
+                        {/* <DropdownMenuItem>
                           <Download className="mr-2 h-4 w-4" />
                           <span>Download</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        </DropdownMenuItem> */}
+                        <DropdownMenuItem
+                          onClick={() =>
+                            handleSent(document._id, document.title)
+                          }
+                        >
                           <Share className="mr-2 h-4 w-4" />
-                          <span>Share</span>
+                          <span>Sent</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Trash className="mr-2 h-4 w-4" />
