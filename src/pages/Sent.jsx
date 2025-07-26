@@ -56,8 +56,10 @@ function Sent() {
     <main className="container mx-auto py-6 px-4 md:px-6">
       <div className="flex flex-col gap-6">
         <div className="space-y-2">
-          <h2 className="text-lg font-bold">Place Signature Pointer</h2>
-
+          <h2 className="text-lg font-bold">Tempatkan Letak Tanda Tangan</h2>
+          <p className="text-muted-foreground">
+            <em>{title}</em>
+          </p>
           <div
             className="mb-2 inline-block px-3 py-1 bg-blue-600 text-white cursor-grab rounded"
             draggable
@@ -65,7 +67,7 @@ function Sent() {
               e.dataTransfer.setData("text/plain", "signature-pointer")
             }
           >
-            🖋️ Drag me to PDF
+            🖋️ Drag ke PDF
           </div>
 
           <div
@@ -95,7 +97,7 @@ function Sent() {
                   position: "absolute",
                 }}
               >
-                SIGN HERE
+                TTD Disini
               </div>
             )}
           </div>
