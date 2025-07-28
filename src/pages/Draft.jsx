@@ -160,14 +160,16 @@ export default function Documents() {
                           <Download className="mr-2 h-4 w-4" />
                           <span>Download</span>
                         </DropdownMenuItem> */}
-                        <DropdownMenuItem
-                          onClick={() =>
-                            handleSent(document._id, document.title)
-                          }
-                        >
-                          <Share className="mr-2 h-4 w-4" />
-                          <span>Sent</span>
-                        </DropdownMenuItem>
+                        {document.status !== "sent" && (
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleSent(document._id, document.title)
+                            }
+                          >
+                            <Share className="mr-2 h-4 w-4" />
+                            <span>Sent</span>
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem>
                           <Trash className="mr-2 h-4 w-4" />
                           <span>Delete</span>

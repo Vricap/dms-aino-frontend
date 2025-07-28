@@ -1,11 +1,8 @@
+import { Document, Page } from "react-pdf";
 import { useLocation } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
 import axios from "axios";
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url,
-).toString();
+import { useNavigate } from "react-router-dom";
 
 export default function Sent() {
   const [blobUrl, setblobUrl] = useState(null);
@@ -15,12 +12,18 @@ export default function Sent() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
   const [pointerPos, setPointerPos] = useState(null);
+  const [users, setUsers] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const navigate = useNavigate();
 
   const containerRef = useRef();
   const location = useLocation();
   const { id, title } = location.state || {};
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchDocuments = async () => {
       try {
         const response = await axios.get(
@@ -32,17 +35,43 @@ export default function Sent() {
             responseType: "blob", // Tell axios to treat the response as a Blob
           },
         );
-        setblobUrl(URL.createObjectURL(response.data));
+        if (isMounted) {
+          setblobUrl(URL.createObjectURL(response.data));
+        }
       } catch (err) {
         // TODO: since we tell axios to always treat all response as blob, if server response an json error, we cant read the error message
-        setError(`Failed to load documents. ${err}`);
+        if (isMounted) {
+          setError(`Failed to load documents. ${err.message}`);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
-
     fetchDocuments();
-  }, []);
+
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/users`,
+          {
+            headers: {
+              "x-access-token": localStorage.getItem("token"),
+            },
+          },
+        );
+        setUsers(response.data);
+      } catch (err) {
+        setError(`Error getting all user. ${err}`);
+      }
+    };
+    fetchUsers();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
 
   if (loading) {
     return <p className="p-4">Loading documents...</p>;
@@ -88,6 +117,40 @@ export default function Sent() {
     // onSave(pos); // send to backend or store in parent
   }
 
+  const sentRequest = async () => {
+    if (!pointerPos || !selectedUsers) {
+      setError(
+        "Letakkan tempat tanda tangan dan pilih penerima sebelum mengirim.",
+      );
+      return;
+    }
+
+    const dateSent = new Date();
+    const receiver = selectedUsers.map((user) => {
+      return { user: user, dateSent };
+    });
+
+    try {
+      await axios.put(
+        process.env.REACT_APP_BASE_URL + `/documents/${id}`,
+        {
+          status: "sent",
+          receiver: receiver,
+          pointer: pointerPos,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem("token"),
+          },
+        },
+      );
+      navigate("/draft");
+    } catch (err) {
+      setError(`Gagal mengirim file: ${err}`);
+    }
+  };
+
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
       <div className="flex flex-col gap-6">
@@ -96,67 +159,140 @@ export default function Sent() {
           <p className="text-muted-foreground">
             <em>{title}</em>
           </p>
-          <div
-            className="mb-2 inline-block px-3 py-1 bg-blue-600 text-white cursor-grab rounded"
-            draggable
-            onDragStart={(e) =>
-              e.dataTransfer.setData("text/plain", "signature-pointer")
-            }
-          >
-            🖋️ Drag ke PDF
+
+          <div className="flex gap-6 justify-end">
+            <button
+              className="px-4 py-2 bg-blue-600 text-white rounded"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Pilih Penerima
+            </button>
+
+            <button
+              className="px-4 py-2 bg-blue-600 text-white rounded"
+              onClick={sentRequest}
+            >
+              Kirim
+            </button>
           </div>
 
-          <div
-            ref={containerRef}
-            className="relative border inline-block"
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={handleDrop}
-            style={{ minHeight: 400 }}
-          >
-            <Document file={blobUrl} onLoadSuccess={onDocumentLoadSuccess}>
-              <Page
-                pageNumber={pageNumber}
-                onRenderSuccess={onPageRenderSuccess}
-                renderAnnotationLayer={false}
-                renderTextLayer={false}
-              />
-            </Document>
+          <div className="inline-block mr-16 opacity-0">
+            foo bar buz .........
+          </div>
+          {blobUrl && (
+            <div
+              ref={containerRef}
+              className="relative border inline-block"
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDrop}
+              style={{ minHeight: 400 }}
+            >
+              <Document file={blobUrl} onLoadSuccess={onDocumentLoadSuccess}>
+                <Page
+                  pageNumber={pageNumber}
+                  onRenderSuccess={onPageRenderSuccess}
+                  renderAnnotationLayer={false}
+                  renderTextLayer={false}
+                />
+              </Document>
 
-            {pointerPos && (
-              <div
-                className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
-                style={{
-                  left: `${(pointerPos.x / pageDims.width) * 100}%`,
-                  top: `${((pageDims.height - pointerPos.y) / pageDims.height) * 100}%`,
-                  width: `${(pointerPos.width / pageDims.width) * 100}%`,
-                  height: `${(pointerPos.height / pageDims.height) * 100}%`,
-                  position: "absolute",
-                }}
+              {pointerPos && (
+                <div
+                  className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
+                  style={{
+                    left: `${(pointerPos.x / pageDims.width) * 100}%`,
+                    top: `${((pageDims.height - pointerPos.y) / pageDims.height) * 100}%`,
+                    width: `${(pointerPos.width / pageDims.width) * 100}%`,
+                    height: `${(pointerPos.height / pageDims.height) * 100}%`,
+                    position: "absolute",
+                  }}
+                >
+                  TTD Disini
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="flex justify-between">
+            <div></div>
+            <div className="flex space-x-2 p-2">
+              <button
+                disabled={pageNumber <= 1}
+                onClick={() => setPageNumber((p) => p - 1)}
               >
-                TTD Disini
-              </div>
-            )}
-          </div>
+                ⬅️
+              </button>
+              <span>
+                Page {pageNumber} / {numPages}
+              </span>
+              <button
+                disabled={pageNumber >= numPages}
+                onClick={() => setPageNumber((p) => p + 1)}
+              >
+                ➡️
+              </button>
+            </div>
 
-          <div className="mt-2 flex space-x-2">
-            <button
-              disabled={pageNumber <= 1}
-              onClick={() => setPageNumber((p) => p - 1)}
+            <div
+              className="bg-blue-600 text-white cursor-grab rounded p-2"
+              draggable
+              onDragStart={(e) =>
+                e.dataTransfer.setData("text/plain", "signature-pointer")
+              }
             >
-              ⬅️
-            </button>
-            <span>
-              Page {pageNumber} / {numPages}
-            </span>
-            <button
-              disabled={pageNumber >= numPages}
-              onClick={() => setPageNumber((p) => p + 1)}
-            >
-              ➡️
-            </button>
+              🖋️ Drag ke PDF
+            </div>
           </div>
         </div>
       </div>
+
+      {/* popup for selecting users */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 text-black">
+          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4">
+            <h3 className="text-lg font-semibold">Select Users</h3>
+            <div className="max-h-60 overflow-y-auto space-y-2">
+              {users &&
+                users.rows.map((user) => (
+                  <label key={user._id} className="block">
+                    <input
+                      type="checkbox"
+                      className="mr-2"
+                      checked={selectedUsers.includes(user._id)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedUsers((prev) => [...prev, user._id]);
+                        } else {
+                          setSelectedUsers((prev) =>
+                            prev.filter((id) => id !== user._id),
+                          );
+                        }
+                      }}
+                    />
+                    {user.username || user.email}
+                  </label>
+                ))}
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-3 py-1 bg-gray-200 rounded"
+              >
+                Batal
+              </button>
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  // console.log("Selected users:", selectedUsers);
+                }}
+                className="px-3 py-1 bg-blue-600 rounded text-white"
+              >
+                Konfirmasi
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
