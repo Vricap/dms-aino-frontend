@@ -22,12 +22,13 @@ import {
   FileText,
   // FileSignature,
   MoreHorizontal,
-  // Download,
+  Download,
   Share,
   Trash,
   Search,
   // Plus,
   Filter,
+  Eye,
 } from "lucide-react";
 
 export default function Documents() {
@@ -38,6 +39,10 @@ export default function Documents() {
 
   const handleSent = (id, title) => {
     navigate("/sent", { state: { id: id, title: title } });
+  };
+
+  const viewDoc = (id, title) => {
+    navigate("/view", { state: { id: id, title: title } });
   };
 
   useEffect(() => {
@@ -156,10 +161,6 @@ export default function Documents() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        {/* <DropdownMenuItem>
-                          <Download className="mr-2 h-4 w-4" />
-                          <span>Download</span>
-                        </DropdownMenuItem> */}
                         {document.status !== "sent" && (
                           <DropdownMenuItem
                             onClick={() =>
@@ -170,6 +171,16 @@ export default function Documents() {
                             <span>Sent</span>
                           </DropdownMenuItem>
                         )}
+                        <DropdownMenuItem
+                          onClick={() => viewDoc(document._id, document.title)}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          <span>View</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Download className="mr-2 h-4 w-4" />
+                          <span>Download</span>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Trash className="mr-2 h-4 w-4" />
                           <span>Delete</span>

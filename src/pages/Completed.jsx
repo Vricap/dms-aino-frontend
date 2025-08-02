@@ -19,13 +19,10 @@ import {
 import { Badge } from "../components/ui/badge";
 import {
   FileText,
-  FileSignature,
   MoreHorizontal,
   Download,
-  Share,
   Trash,
   Search,
-  Plus,
   Filter,
 } from "lucide-react";
 
@@ -155,10 +152,6 @@ export default function Documents() {
                         <DropdownMenuItem>
                           <Download className="mr-2 h-4 w-4" />
                           <span>Download</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Share className="mr-2 h-4 w-4" />
-                          <span>Share</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Trash className="mr-2 h-4 w-4" />

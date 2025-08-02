@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -19,20 +20,23 @@ import {
 // import { Badge } from "../components/ui/badge";
 import {
   FileText,
-  // FileSignature,
   MoreHorizontal,
   Download,
-  Share,
   Trash,
   Search,
-  // Plus,
   Filter,
+  Eye,
 } from "lucide-react";
 
 export default function Documents() {
   const [documents, setDocuments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const viewDoc = (id, title) => {
+    navigate("/view", { state: { id: id, title: title } });
+  };
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -149,13 +153,15 @@ export default function Documents() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => viewDoc(document._id, document.title)}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          <span>View</span>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Download className="mr-2 h-4 w-4" />
                           <span>Download</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Share className="mr-2 h-4 w-4" />
-                          <span>Share</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Trash className="mr-2 h-4 w-4" />
