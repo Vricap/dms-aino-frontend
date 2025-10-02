@@ -58,7 +58,9 @@ export default function Documents() {
         );
         setDocuments(response.data);
       } catch (err) {
-        setError(`Failed to load documents. You may not be logged in. ${err}`);
+        setError(
+          `Failed to load documents. You may not be logged in. ${err.response?.data?.message}`,
+        );
       } finally {
         setLoading(false);
       }

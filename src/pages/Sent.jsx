@@ -63,7 +63,7 @@ export default function Sent() {
         );
         setUsers(response.data);
       } catch (err) {
-        setError(`Error getting all user. ${err}`);
+        setError(`Error getting all user. ${err.response?.data?.message}`);
       }
     };
     fetchUsers();
@@ -147,7 +147,7 @@ export default function Sent() {
       );
       navigate("/draft");
     } catch (err) {
-      setError(`Gagal mengirim file: ${err}`);
+      setError(`Gagal mengirim file: ${err.response?.data?.message}`);
     }
   };
 

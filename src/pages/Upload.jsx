@@ -84,7 +84,7 @@ const Upload = () => {
 
       navigate("/draft");
     } catch (err) {
-      setError(`Upload failed: ${err}`);
+      setError(`Upload failed: ${err.response?.data?.message}`);
     } finally {
       setIsLoading(false);
     }
