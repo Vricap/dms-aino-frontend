@@ -16,6 +16,7 @@ import Completed from "./pages/Completed.jsx";
 // import Audit from "./pages/Audit.jsx";
 import Sent from "./pages/Sent.jsx";
 import View from "./pages/View.jsx";
+import Profile from "./pages/Profile.jsx";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
               {/* <Route path="/audit" element={<Audit />} /> */}
               <Route path="/sent" element={<Sent />} />
               <Route path="/view" element={<View />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </main>
         </div>

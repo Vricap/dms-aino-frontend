@@ -38,6 +38,23 @@ export default function Documents() {
     navigate("/view", { state: { id: id, title: title } });
   };
 
+  const signDocument = async (id) => {
+    try {
+      await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/documents/sign/${id}`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        },
+      );
+      alert(`Tanda tangan dokumen BERHASIL!`);
+      navigate("/inbox");
+    } catch (err) {
+      alert(`Tanda tangan dokumen GAGAL! ${err.response.data.message}`);
+    }
+  };
+
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
@@ -51,7 +68,9 @@ export default function Documents() {
         );
         setDocuments(response.data);
       } catch (err) {
-        setError(`Failed to load documents. You may not be logged in. ${err}`);
+        setError(
+          `Failed to load documents. You may not be logged in. ${err.response.data.message}`,
+        );
       } finally {
         setLoading(false);
       }
@@ -99,10 +118,10 @@ export default function Documents() {
             <TableHeader>
               <TableRow>
                 <TableHead>Title</TableHead>
-                {/* <TableHead>Status</TableHead> */}
                 <TableHead>Division</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Date Sent</TableHead>
+                <TableHead className="w-[70px]"></TableHead>
                 <TableHead className="w-[70px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -115,35 +134,19 @@ export default function Documents() {
                       <span className="font-medium">{document.title}</span>
                     </div>
                   </TableCell>
-                  {/* <TableCell>
-                    <Badge
-                      variant={
-                        document.status === "saved"
-                          ? "success"
-                          : document.status === "sent"
-                            ? "warning"
-                            : document.status === "completed"
-                              ? "outline"
-                              : "secondary"
-                      }
-                      className={
-                        document.status === "saved"
-                          ? "bg-green-500/10 text-green-500 hover:bg-green-500/20 hover:text-green-600"
-                          : document.status === "sent"
-                            ? "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 hover:text-yellow-600"
-                            : document.status === "completed"
-                              ? "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20 hover:text-gray-600"
-                              : ""
-                      }
-                    >
-                      {document.status}
-                    </Badge>
-                  </TableCell> */}
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
                   {document.receiver.map((v) => (
                     <TableCell>{v.dateSent}</TableCell>
                   ))}
+                  <TableCell>
+                    <button
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                      onClick={() => signDocument(document._id)}
+                    >
+                      SIGN
+                    </button>
+                  </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

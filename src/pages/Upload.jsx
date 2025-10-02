@@ -112,7 +112,7 @@ const Upload = () => {
             <label className="block mb-1 font-medium">Select File</label>
             <input
               type="file"
-              accept=".pdf,.doc,.docx,.jpg,.png"
+              accept=".pdf,.doc,.docx" // TODO: what file types do we support?
               onChange={(e) => setFile(e.target.files[0])}
               required
               className="block w-full border border-gray-300 rounded px-3 py-2"
