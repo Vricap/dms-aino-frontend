@@ -65,7 +65,10 @@ export default function Profile() {
 
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
-      <div className="flex flex-col md:flex-row gap-6 items-start mx-auto">
+      <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
+      <p className="text-muted-foreground mb-4">Profil mengenai dirimu.</p>
+      <h2 className="text-lg font-bold">Tanda tanganmu:</h2>
+      <div className="flex flex-col md:flex-row gap-6 items-start mx-auto mb-4">
         {imgUrl ? (
           <img
             alt="user signature"
