@@ -49,7 +49,7 @@ export default function Documents() {
         },
       );
       alert(`Tanda tangan dokumen BERHASIL!`);
-      navigate("/inbox");
+      navigate("/draft");
     } catch (err) {
       alert(`Tanda tangan dokumen GAGAL! ${err.response.data.message}`);
     }
@@ -68,9 +68,7 @@ export default function Documents() {
         );
         setDocuments(response.data);
       } catch (err) {
-        setError(
-          `Failed to load documents. You may not be logged in. ${err.response.data.message}`,
-        );
+        setError(`Failed to load documents. ${err.response.data.message}`);
       } finally {
         setLoading(false);
       }
@@ -136,9 +134,7 @@ export default function Documents() {
                   </TableCell>
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
-                  {document.receiver.map((v) => (
-                    <TableCell>{v.dateSent}</TableCell>
-                  ))}
+                  <TableCell>{document.receiver.dateSent}</TableCell>
                   <TableCell>
                     <button
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"

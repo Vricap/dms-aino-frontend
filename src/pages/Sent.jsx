@@ -14,7 +14,7 @@ export default function Sent() {
   const [pointerPos, setPointerPos] = useState(null);
   const [users, setUsers] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
   const navigate = useNavigate();
 
   const containerRef = useRef();
@@ -118,7 +118,7 @@ export default function Sent() {
   }
 
   const sentRequest = async () => {
-    if (!pointerPos || !selectedUsers) {
+    if (!pointerPos || !selectedUser) {
       setError(
         "Letakkan tempat tanda tangan dan pilih penerima sebelum mengirim.",
       );
@@ -126,9 +126,7 @@ export default function Sent() {
     }
 
     const dateSent = new Date();
-    const receiver = selectedUsers.map((user) => {
-      return { user: user, dateSent };
-    });
+    const receiver = { user: selectedUser, dateSent };
 
     try {
       await axios.put(
@@ -256,17 +254,18 @@ export default function Sent() {
                 users.rows.map((user) => (
                   <label key={user._id} className="block">
                     <input
-                      type="checkbox"
+                      type="radio"
                       className="mr-2"
-                      checked={selectedUsers.includes(user._id)}
+                      checked={selectedUser.includes(user._id)}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setSelectedUsers((prev) => [...prev, user._id]);
-                        } else {
-                          setSelectedUsers((prev) =>
-                            prev.filter((id) => id !== user._id),
-                          );
+                          setSelectedUser(user._id);
                         }
+                        // else {
+                        //   setSelectedUser((prev) =>
+                        //     prev.filter((id) => id !== user._id),
+                        //   );
+                        // }
                       }}
                     />
                     {user.username || user.email}

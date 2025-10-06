@@ -28,8 +28,8 @@ export default function Profile() {
           },
         },
       );
-
-      navigate("/profile");
+      alert("Upload tanda tangan berhasil!");
+      navigate("/dashboard");
     } catch (err) {
       alert(`Upload signature failed: ${err.response?.data?.message}`);
     }
@@ -52,9 +52,6 @@ export default function Profile() {
         // Create a URL from the blob and display it
         const imgUrl = URL.createObjectURL(res.data);
         setImgUrl(imgUrl);
-        // const img = document.createElement("img");
-        // img.src = imgUrl;
-        // document.body.appendChild(img);
       } catch (err) {
         // alert(`Terjadi error: ${err.response?.data?.message}`);
       }
