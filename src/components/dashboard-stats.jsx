@@ -8,7 +8,9 @@ export function DashboardStats() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex flex-row items-center justify-between w-full">
-            <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Documents
+            </CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </div>
         </CardHeader>
@@ -20,7 +22,9 @@ export function DashboardStats() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex flex-row items-center justify-between w-full">
-            <CardTitle className="text-sm font-medium">Signed Documents</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Signed Documents
+            </CardTitle>
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </div>
         </CardHeader>
@@ -32,7 +36,9 @@ export function DashboardStats() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex flex-row items-center justify-between w-full">
-            <CardTitle className="text-sm font-medium">Pending Signatures</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Request Signatures
+            </CardTitle>
             <FileSignature className="h-4 w-4 text-muted-foreground" />
           </div>
         </CardHeader>
@@ -44,13 +50,15 @@ export function DashboardStats() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex flex-row items-center justify-between w-full">
-            <CardTitle className="text-sm font-medium">Expiring Soon</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">
+              Uploaded Documents
+            </CardTitle>
+            <FileSignature className="h-4 w-4 text-muted-foreground" />
           </div>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">7</div>
-          <p className="text-xs text-muted-foreground">Require attention</p>
+          <div className="text-2xl font-bold">30</div>
+          <p className="text-xs text-muted-foreground">+5 from last week</p>
         </CardContent>
       </Card>
     </div>
