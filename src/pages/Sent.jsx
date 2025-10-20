@@ -11,7 +11,7 @@ export default function Sent() {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
-  const [pointerPos, setPointerPos] = useState(null);
+  const [pointerPos, setPointerPos] = useState([]);
   const [users, setUsers] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState("");
@@ -113,7 +113,7 @@ export default function Sent() {
       height,
     };
 
-    setPointerPos(pos);
+    setPointerPos([...pointerPos, pos]);
     // onSave(pos); // send to backend or store in parent
   }
 
@@ -194,20 +194,23 @@ export default function Sent() {
                 />
               </Document>
 
-              {pointerPos && (
-                <div
-                  className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
-                  style={{
-                    left: `${(pointerPos.x / pageDims.width) * 100}%`,
-                    top: `${((pageDims.height - pointerPos.y) / pageDims.height) * 100}%`,
-                    width: `${(pointerPos.width / pageDims.width) * 100}%`,
-                    height: `${(pointerPos.height / pageDims.height) * 100}%`,
-                    position: "absolute",
-                  }}
-                >
-                  TTD Disini
-                </div>
-              )}
+              {pointerPos &&
+                pointerPos.map((pos, index) =>
+                  pos.page === pageNumber ? (
+                    <div
+                      className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
+                      style={{
+                        left: `${(pos.x / pageDims.width) * 100}%`,
+                        top: `${((pageDims.height - pos.y) / pageDims.height) * 100}%`,
+                        width: `${(pos.width / pageDims.width) * 100}%`,
+                        height: `${(pos.height / pageDims.height) * 100}%`,
+                        position: "absolute",
+                      }}
+                    >
+                      TTD Disini
+                    </div>
+                  ) : null,
+                )}
             </div>
           )}
 

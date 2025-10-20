@@ -10,7 +10,7 @@ export default function View() {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
-  const [pointerPos, setPointerPos] = useState(null);
+  const [pointerPos, setPointerPos] = useState([]);
 
   const location = useLocation();
   const { id, title } = location.state || {};
@@ -95,7 +95,25 @@ export default function View() {
               />
             </Document>
 
-            {pointerPos && pointerPos.page === pageNumber && (
+            {pointerPos &&
+              pointerPos.map((pos, index) =>
+                pos.page === pageNumber ? (
+                  <div
+                    className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
+                    style={{
+                      left: `${(pos.x / pageDims.width) * 100}%`,
+                      top: `${((pageDims.height - pos.y) / pageDims.height) * 100}%`,
+                      width: `${(pos.width / pageDims.width) * 100}%`,
+                      height: `${(pos.height / pageDims.height) * 100}%`,
+                      position: "absolute",
+                    }}
+                  >
+                    TTD Disini
+                  </div>
+                ) : null,
+              )}
+
+            {/* {pointerPos && pointerPos.page === pageNumber && (
               <div
                 className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
                 style={{
@@ -108,7 +126,7 @@ export default function View() {
               >
                 TTD Disini
               </div>
-            )}
+            )}*/}
           </div>
 
           <div className="flex justify-between">
