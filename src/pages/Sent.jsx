@@ -90,6 +90,10 @@ export default function Sent() {
     setPageDims({ width: viewport.width, height: viewport.height });
   }
 
+  function clearSign() {
+    setPointerPos([]);
+  }
+
   function handleDrop(e) {
     e.preventDefault();
     const bounds = containerRef.current.getBoundingClientRect();
@@ -118,8 +122,8 @@ export default function Sent() {
   }
 
   const sentRequest = async () => {
-    if (!pointerPos || !selectedUser) {
-      setError(
+    if (pointerPos.length === 0 || !selectedUser) {
+      alert(
         "Letakkan tempat tanda tangan dan pilih penerima sebelum mengirim.",
       );
       return;
@@ -234,14 +238,24 @@ export default function Sent() {
               </button>
             </div>
 
-            <div
-              className="bg-blue-600 text-white cursor-grab rounded p-2"
-              draggable
-              onDragStart={(e) =>
-                e.dataTransfer.setData("text/plain", "signature-pointer")
-              }
-            >
-              🖋️ Drag ke PDF
+            <div className="flex gap-1">
+              {pointerPos && (
+                <div
+                  className="bg-red-600 text-white cursor-grab rounded p-2"
+                  onClick={clearSign}
+                >
+                  🧹 Clear
+                </div>
+              )}
+              <div
+                className="bg-blue-600 text-white cursor-grab rounded p-2"
+                draggable
+                onDragStart={(e) =>
+                  e.dataTransfer.setData("text/plain", "signature-pointer")
+                }
+              >
+                🖋️ Drag ke PDF
+              </div>
             </div>
           </div>
         </div>
