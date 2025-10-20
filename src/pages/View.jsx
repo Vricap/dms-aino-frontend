@@ -95,6 +95,7 @@ export default function View() {
               />
             </Document>
 
+            {/* TODO: pointerPos is now an array and EMPTY array is TRUTHY*/}
             {pointerPos &&
               pointerPos.map((pos, index) =>
                 pos.page === pageNumber ? (
@@ -112,21 +113,6 @@ export default function View() {
                   </div>
                 ) : null,
               )}
-
-            {/* {pointerPos && pointerPos.page === pageNumber && (
-              <div
-                className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
-                style={{
-                  left: `${(pointerPos.x / pageDims.width) * 100}%`,
-                  top: `${((pageDims.height - pointerPos.y) / pageDims.height) * 100}%`,
-                  width: `${(pointerPos.width / pageDims.width) * 100}%`,
-                  height: `${(pointerPos.height / pageDims.height) * 100}%`,
-                  position: "absolute",
-                }}
-              >
-                TTD Disini
-              </div>
-            )}*/}
           </div>
 
           <div className="flex justify-between">

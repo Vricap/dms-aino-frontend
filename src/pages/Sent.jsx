@@ -198,6 +198,7 @@ export default function Sent() {
                 />
               </Document>
 
+              {/* TODO: pointerPos is now an array and EMPTY array is TRUTHY*/}
               {pointerPos &&
                 pointerPos.map((pos, index) =>
                   pos.page === pageNumber ? (
@@ -239,6 +240,7 @@ export default function Sent() {
             </div>
 
             <div className="flex gap-1">
+              {/* TODO: pointerPos is now an array and EMPTY array is TRUTHY*/}
               {pointerPos && (
                 <div
                   className="bg-red-600 text-white cursor-grab rounded p-2"
