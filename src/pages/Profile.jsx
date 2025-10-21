@@ -9,6 +9,7 @@ export default function Profile() {
     username: localStorage.getItem("username"),
     email: localStorage.getItem("email"),
     role: localStorage.getItem("role"),
+    division: localStorage.getItem("division"),
     newPassword: "",
   });
   const navigate = useNavigate();
@@ -92,6 +93,7 @@ export default function Profile() {
       localStorage.setItem("id", response.data.id);
       localStorage.setItem("email", response.data.email);
       localStorage.setItem("role", response.data.role);
+      localStorage.setItem("division", response.data.division);
       alert("Update sukses!");
       navigate("/dashboard");
     } catch (err) {
@@ -165,6 +167,7 @@ export default function Profile() {
               name="email"
               placeholder="Masukan email baru"
               readOnly
+              disabled
               value={userData.email}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
@@ -179,13 +182,29 @@ export default function Profile() {
               name="role"
               placeholder="Masukan role baru"
               readOnly
+              disabled
               value={userData.role}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
             />
           </div>
 
-          {/* Role */}
+          {/* Division */}
+          <div>
+            <label className="block font-medium mb-1">Division</label>
+            <input
+              type="text"
+              name="division"
+              value={userData.division}
+              readOnly
+              disabled
+              placeholder="Masukan division baru"
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
+            />
+          </div>
+          
+          {/* New Password */}
           <div>
             <label className="block font-medium mb-1">New Password</label>
             <input
@@ -197,6 +216,7 @@ export default function Profile() {
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
             />
           </div>
+
 
           {/* Submit Button */}
           <button

@@ -53,6 +53,7 @@ export function Header() {
     localStorage.removeItem("id");
     localStorage.removeItem("email");
     localStorage.removeItem("role");
+    localStorage.removeItem("division");
     setIsLoggedIn(false);
     navigate("/login");
   }
