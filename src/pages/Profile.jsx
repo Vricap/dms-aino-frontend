@@ -5,6 +5,12 @@ import { useNavigate } from "react-router-dom";
 export default function Profile() {
   const [signatureFile, setSignatureFile] = useState(null);
   const [imgUrl, setImgUrl] = useState("");
+  const [userData, setUserData] = useState({
+    username: localStorage.getItem("username"),
+    email: localStorage.getItem("email"),
+    role: localStorage.getItem("role"),
+    newPassword: "",
+  });
   const navigate = useNavigate();
 
   const handleSignatureSubmit = async (e) => {
@@ -60,6 +66,39 @@ export default function Profile() {
     fetchUserSignature();
   }, []);
 
+  const handleChange = (e) => {
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(
+        process.env.REACT_APP_BASE_URL + `/users/${localStorage.getItem("id")}`,
+        {
+          data: userData,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem("token"),
+          },
+        },
+      );
+      localStorage.setItem("username", response.data.username);
+      localStorage.setItem("id", response.data.id);
+      localStorage.setItem("email", response.data.email);
+      localStorage.setItem("role", response.data.role);
+      alert("Update sukses!");
+      navigate("/dashboard");
+    } catch (err) {
+      alert(`Update gagal. ${err.response?.data?.message}`);
+    }
+  };
+
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
       <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
@@ -101,6 +140,74 @@ export default function Profile() {
           </button>
         </form>
       </div>
+
+      {/* <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">*/}
+      <div className="w-full rounded-lg shadow-md mt-8">
+        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+          {/* Username */}
+          <div>
+            <label className="block font-medium mb-1">Username</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Masukan username baru"
+              value={userData.username}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
+            />
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="block font-medium mb-1">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Masukan email baru"
+              readOnly
+              value={userData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
+            />
+          </div>
+
+          {/* Role */}
+          <div>
+            <label className="block font-medium mb-1">Role</label>
+            <input
+              type="text"
+              name="role"
+              placeholder="Masukan role baru"
+              readOnly
+              value={userData.role}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
+            />
+          </div>
+
+          {/* Role */}
+          <div>
+            <label className="block font-medium mb-1">New Password</label>
+            <input
+              type="text"
+              name="newPassword"
+              value={userData.newPassword}
+              placeholder="Masukan password baru"
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 text-white py-4 px-4 rounded-md hover:bg-indigo-700 transition col-span-full"
+          >
+            Simpan Perubahan
+          </button>
+        </form>
+      </div>
+      {/* </div>*/}
     </main>
   );
 }
