@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  useLocation,
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
 import { Header } from "./components/header.jsx";
 import { Sidebar } from "./components/sidebar.jsx";
 
@@ -17,32 +22,104 @@ import Completed from "./pages/Completed.jsx";
 import Sent from "./pages/Sent.jsx";
 import View from "./pages/View.jsx";
 import Profile from "./pages/Profile.jsx";
+import ProtectedRoute from "./components/protected-routes.jsx";
+
+function Layout() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login";
+  return (
+    <div className="app">
+      {!isLoginPage && <Header />}
+      <div className="main-content flex">
+        {!isLoginPage && <Sidebar />}
+        <main className="content w-full">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/upload"
+              element={
+                <ProtectedRoute>
+                  <Upload />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/draft"
+              element={
+                <ProtectedRoute>
+                  <Draft />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/inbox"
+              element={
+                <ProtectedRoute>
+                  <Inbox />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/completed"
+              element={
+                <ProtectedRoute>
+                  <Completed />
+                </ProtectedRoute>
+              }
+            />
+            {/* <Route path="/signatures" element={<Signatures />} /> */}
+            {/* <Route path="/audit" element={<Audit />} /> */}
+            <Route
+              path="/sent"
+              element={
+                <ProtectedRoute>
+                  <Sent />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/view"
+              element={
+                <ProtectedRoute>
+                  <View />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
+      </div>
+    </div>
+  );
+}
 
 function App() {
   return (
     <Router>
-      <div className="app">
-        <Header />
-        <div className="main-content flex">
-          <Sidebar />
-          <main className="content w-full">
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/upload" element={<Upload />} />
-              <Route path="/draft" element={<Draft />} />
-              <Route path="/inbox" element={<Inbox />} />
-              <Route path="/completed" element={<Completed />} />
-              {/* <Route path="/signatures" element={<Signatures />} /> */}
-              {/* <Route path="/audit" element={<Audit />} /> */}
-              <Route path="/sent" element={<Sent />} />
-              <Route path="/view" element={<View />} />
-              <Route path="/profile" element={<Profile />} />
-            </Routes>
-          </main>
-        </div>
-      </div>
+      <Layout />
     </Router>
   );
 }
