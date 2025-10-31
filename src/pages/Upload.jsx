@@ -2,47 +2,45 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const types = [
-  "ADD",
-  "BA",
-  "SKU",
-  "JO",
-  "KK",
-  "KW",
-  "MOM",
-  "MOU",
-  "NC",
-  "ND",
-  "PENG",
-  "PEM",
-  "PB",
-  "PM",
-  "PN",
-  "NDA",
-  "PKS",
-  "PR",
-  "PNW",
-  "PO",
-  "PT",
-  "SK",
-  "SKT",
-  "SP",
-  "SPI",
-  "SPK",
-  "SPR",
-  "SR",
-  "SE",
-  "PNG",
-  "SERT",
-  "TAG",
-  "U",
-  "ST",
-  "PQ",
-  "PJ",
-  "CL",
-];
-
-// const divisions = ["MKT", "FIN", "CHC", "PROD", "OPS", "ITINFRA", "LGL", "DIR"];
+const types = {
+  ADD: "ADDENDUM",
+  BA: "BERITA ACARA",
+  SKU: "SURAT KUASA",
+  JO: "JOB ORDER",
+  KK: "KONTRAK KERJA",
+  KW: "KWITANSI",
+  MOM: "MINUTES OF MEETING",
+  MOU: "MEMORANDUM OF UNDERSTANDING",
+  NC: "NOTA CAPAIAN",
+  ND: "NOTA DINAS",
+  PENG: "PENGADUAN",
+  PEM: "PEMBERITAHUAN",
+  PB: "PENERIMAAN BARANG",
+  PM: "PERMOHONAN",
+  PN: "PENOLAKAN",
+  NDA: "PERJANJIAN KERAHASIAAN",
+  PKS: "PERJANJIAN KERJA SAMA",
+  PR: "PERKENALAN",
+  PNW: "PENERANGAN",
+  PO: "PURCHASE ORDER",
+  PT: "PENGANTAR",
+  SK: "SURAT KEPUTUSAN",
+  SKT: "SURAT KETERANGAN",
+  SP: "SURAT PERINGATAN",
+  SPI: "SURAT PEMBERIAN IZIN",
+  SPK: "SURAT PERINTAH KERJA",
+  SPR: "SURAT PERNYATAAN",
+  SR: "SURAT REKOMENDASI",
+  SE: "SURAT EDARAN",
+  PNG: "PENUGASAN",
+  SERT: "SERTIFIKAT",
+  TAG: "TAGIHAN",
+  U: "UNDANGAN",
+  ST: "SURAT TEGURAN",
+  PQ: "MATERIAL REQUEST",
+  PJ: "PERSETUJUAN",
+  CL: "CONFIRMATION LETTER",
+};
 
 const Upload = () => {
   const [file, setFile] = useState(null);
@@ -129,9 +127,10 @@ const Upload = () => {
               className="block w-full border border-gray-300 rounded px-3 py-2"
             >
               <option value="">Select Type</option>
-              {types.map((docType) => (
-                <option key={docType} value={docType}>
-                  {docType.charAt(0).toUpperCase() + docType.slice(1)}
+              {Object.keys(types).map((key) => (
+                <option key={key} value={key}>
+                  {/* {key.charAt(0).toUpperCase() + key.slice(1)}*/}
+                  {`${key} (${types[key]})`}
                 </option>
               ))}
             </select>
