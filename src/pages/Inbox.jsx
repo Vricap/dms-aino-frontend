@@ -115,6 +115,7 @@ export default function Documents() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Deskripsi</TableHead>
                 <TableHead>Title</TableHead>
                 <TableHead>Division</TableHead>
                 <TableHead>Type</TableHead>
@@ -126,6 +127,12 @@ export default function Documents() {
             <TableBody>
               {documents.rows.map((document) => (
                 <TableRow key={document._id}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <FileText className="h-5 w-5 text-primary" />
+                      <span className="font-medium">{document.content}</span>
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <FileText className="h-5 w-5 text-primary" />
