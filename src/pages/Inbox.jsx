@@ -49,7 +49,7 @@ export default function Documents() {
         },
       );
       alert(`Tanda tangan dokumen BERHASIL!`);
-      navigate("/draft");
+      navigate("/inbox");
     } catch (err) {
       alert(`Tanda tangan dokumen GAGAL! ${err.response.data.message}`);
     }
@@ -116,7 +116,7 @@ export default function Documents() {
             <TableHeader>
               <TableRow>
                 <TableHead>Deskripsi</TableHead>
-                <TableHead>Title</TableHead>
+                <TableHead>Nomor</TableHead>
                 <TableHead>Division</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Date Sent</TableHead>

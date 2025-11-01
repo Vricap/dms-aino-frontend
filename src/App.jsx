@@ -22,6 +22,8 @@ import Completed from "./pages/Completed.jsx";
 import Sent from "./pages/Sent.jsx";
 import View from "./pages/View.jsx";
 import Profile from "./pages/Profile.jsx";
+import Users from "./pages/Users.jsx";
+import EditUser from "./pages/EditUser.jsx";
 import ProtectedRoute from "./components/protected-routes.jsx";
 
 function Layout() {
@@ -101,11 +103,29 @@ function Layout() {
                 </ProtectedRoute>
               }
             />
+            {localStorage.getItem("role") === "admin" && (
+              <Route
+                path="/users"
+                element={
+                  <ProtectedRoute>
+                    <Users />
+                  </ProtectedRoute>
+                }
+              />
+            )}
             <Route
               path="/profile"
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/users/:id"
+              element={
+                <ProtectedRoute>
+                  <EditUser />
                 </ProtectedRoute>
               }
             />

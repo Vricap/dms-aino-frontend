@@ -95,7 +95,7 @@ const Upload = () => {
         <p className="text-muted-foreground">Upload dokumenmu.</p>
       </div>
 
-      <div className="max-w-md mx-auto mt-10 p-6 bg-white text-gray-900 shadow rounded">
+      <div className="max-w-md mx-auto mt-10 p-6 bg-background rounded-lg shadow-lg border-t-ring">
         <h2 className="text-2xl font-bold mb-4">Form Upload</h2>
 
         {error && (
@@ -113,7 +113,7 @@ const Upload = () => {
               accept=".pdf,.doc,.docx" // TODO: what file types do we support?
               onChange={(e) => setFile(e.target.files[0])}
               required
-              className="block w-full border border-gray-300 rounded px-3 py-2"
+              className="block w-full border rounded px-3 py-2"
             />
           </div>
 
@@ -124,7 +124,7 @@ const Upload = () => {
               value={type}
               onChange={(e) => setType(e.target.value)}
               required
-              className="block w-full border border-gray-300 rounded px-3 py-2"
+              className="block w-full border rounded px-3 py-2 bg-background"
             >
               <option value="">Select Type</option>
               {Object.keys(types).map((key) => (
@@ -162,7 +162,7 @@ const Upload = () => {
               onChange={(e) => setDescription(e.target.value)}
               required
               rows="4"
-              className="block w-full border border-gray-300 rounded px-3 py-2"
+              className="block w-full border rounded px-3 py-2 bg-background"
               placeholder="Enter document description..."
             ></textarea>
           </div>
@@ -171,7 +171,7 @@ const Upload = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full bg-black text-white px-4 py-2 rounded hover:bg-black ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`}
+            className={`w-full bg-black text-white px-4 py-2 rounded hover:bg-black border border-t-green-300 ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`}
           >
             {isLoading ? "Uploading..." : "Upload Document"}
           </button>

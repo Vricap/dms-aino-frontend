@@ -102,7 +102,7 @@ export default function Documents() {
             <TableHeader>
               <TableRow>
                 <TableHead>Deskripsi</TableHead>
-                <TableHead>Title</TableHead>
+                <TableHead>Nomor</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Division</TableHead>
                 <TableHead>Type</TableHead>

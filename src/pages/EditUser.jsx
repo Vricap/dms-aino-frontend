@@ -1,71 +1,61 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
+const divisions = [
+  "MKT",
+  "FIN",
+  "CHC",
+  "PROD",
+  "OPS",
+  "ITINFRA",
+  "LGL",
+  "DIR",
+  "ADMIN",
+];
 
 export default function Profile() {
-  const [signatureFile, setSignatureFile] = useState(null);
-  const [imgUrl, setImgUrl] = useState("");
   const [userData, setUserData] = useState({
-    username: localStorage.getItem("username"),
-    email: localStorage.getItem("email"),
-    role: localStorage.getItem("role"),
-    division: localStorage.getItem("division"),
+    username: "",
+    email: "",
+    role: "",
+    division: "",
     newPassword: "",
   });
+
   const navigate = useNavigate();
 
-  const fetchUserSignature = async () => {
+  const { id } = useParams();
+
+  const fetchUser = async () => {
     try {
-      const res = await axios.get(
-        process.env.REACT_APP_BASE_URL +
-          `/signature/${localStorage.getItem("id")}`,
+      const response = await axios.get(
+        process.env.REACT_APP_BASE_URL + `/users/${id}`,
         {
           headers: {
+            "Content-Type": "application/json",
             "x-access-token": localStorage.getItem("token"),
           },
-          responseType: "blob",
         },
       );
 
-      // Create a URL from the blob and display it
-      const imgUrl = URL.createObjectURL(res.data);
-      setImgUrl(imgUrl);
+      const userObj = {
+        username: response.data.username,
+        email: response.data.email,
+        role: response.data.role,
+        division: response.data.division,
+        newPassword: "",
+      };
+
+      setUserData(userObj);
     } catch (err) {
-      // alert(`Terjadi error: ${err.response?.data?.message}`);
+      alert(`Gagal mendapatkan user. ${err.response?.data?.message}`);
     }
   };
 
   useEffect(() => {
-    fetchUserSignature();
+    fetchUser();
   }, []);
-
-  const handleSignatureSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!signatureFile) {
-      alert("Please fill in all fields");
-      return;
-    }
-    const formData = new FormData();
-    formData.append("signature", signatureFile);
-
-    try {
-      await axios.post(
-        process.env.REACT_APP_BASE_URL + "/signature",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "x-access-token": localStorage.getItem("token"),
-          },
-        },
-      );
-      alert("Upload tanda tangan berhasil!");
-      await fetchUserSignature();
-    } catch (err) {
-      alert(`Upload signature failed: ${err.response?.data?.message}`);
-    }
-  };
 
   const handleChange = (e) => {
     setUserData({
@@ -77,8 +67,8 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        process.env.REACT_APP_BASE_URL + `/users/${localStorage.getItem("id")}`,
+      await axios.put(
+        process.env.REACT_APP_BASE_URL + `/users/${id}`,
         {
           data: userData,
         },
@@ -89,13 +79,8 @@ export default function Profile() {
           },
         },
       );
-      localStorage.setItem("username", response.data.username);
-      localStorage.setItem("id", response.data.id);
-      localStorage.setItem("email", response.data.email);
-      localStorage.setItem("role", response.data.role);
-      localStorage.setItem("division", response.data.division);
       alert("Update sukses!");
-      navigate("/dashboard");
+      navigate("/users");
     } catch (err) {
       alert(`Update gagal. ${err.response?.data?.message}`);
     }
@@ -103,45 +88,10 @@ export default function Profile() {
 
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
-      <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
-      <p className="text-muted-foreground mb-4">Profil mengenai dirimu.</p>
-      <h2 className="text-lg font-bold">Tanda tanganmu:</h2>
-      <div className="flex flex-col md:flex-row gap-6 items-start mx-auto mb-4">
-        {imgUrl ? (
-          <img
-            alt="user signature"
-            src={imgUrl}
-            className="bg-white p-2 rounded"
-          ></img>
-        ) : (
-          <span>
-            <em>
-              Gambar tanda tangan tidak ditemukan. Coba upload gambar tanda
-              tanganmu.
-            </em>
-          </span>
-        )}
-        <form onSubmit={handleSignatureSubmit} className="flex-1">
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">
-              Upload gambar tanda tangan (jpg, png):
-            </label>
-            <input
-              type="file"
-              accept=".jpg,.png"
-              onChange={(e) => setSignatureFile(e.target.files[0])}
-              required
-              className="block w-full border border-gray-300 rounded px-3 py-2"
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-          >
-            Upload
-          </button>
-        </form>
-      </div>
+      <h1 className="text-3xl font-bold tracking-tight">Edit User</h1>
+      <p className="text-muted-foreground mb-4">
+        Update username, email, role, divisi atau password dari User.
+      </p>
 
       {/* <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">*/}
       <div className="w-full rounded-lg shadow-md mt-8">
@@ -153,6 +103,7 @@ export default function Profile() {
               type="text"
               name="username"
               placeholder="Masukan username baru"
+              required
               value={userData.username}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
@@ -166,8 +117,7 @@ export default function Profile() {
               type="email"
               name="email"
               placeholder="Masukan email baru"
-              readOnly
-              disabled
+              required
               value={userData.email}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
@@ -177,31 +127,41 @@ export default function Profile() {
           {/* Role */}
           <div>
             <label className="block font-medium mb-1">Role</label>
-            <input
-              type="text"
+            <select
               name="role"
-              placeholder="Masukan role baru"
-              readOnly
-              disabled
+              required
               value={userData.role}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            />
+            >
+              <option value="">Pilih Role</option>
+              <option key="admin" value="admin">
+                ADMIN
+              </option>
+
+              <option key="user" value="user">
+                USER
+              </option>
+            </select>
           </div>
 
           {/* Division */}
           <div>
             <label className="block font-medium mb-1">Division</label>
-            <input
-              type="text"
+            <select
               name="division"
               value={userData.division}
-              readOnly
-              disabled
-              placeholder="Masukan division baru"
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            />
+              required
+            >
+              <option value="">Pilih Divisi</option>
+              {divisions.map((div) => (
+                <option key={div} value={div}>
+                  {div}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* New Password */}
