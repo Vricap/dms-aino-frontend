@@ -54,7 +54,7 @@ const Login = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
+            Login ke DMS AINO
           </h2>
         </div>
         {error && (
@@ -118,15 +118,15 @@ const Login = () => {
               </label>
             </div>
 
-            <div className="text-sm">
-              {/* TODO: Implement forgot password*/}
+            {/* <div className="text-sm">
+               TODO: Implement forgot password
               <a
                 href="#"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
                 Forgot your password?
               </a>
-            </div>
+            </div>*/}
           </div>
 
           <div>
@@ -157,16 +157,16 @@ const Login = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Signing in...
+                  Login...
                 </>
               ) : (
-                "Sign in"
+                "Login"
               )}
             </button>
           </div>
         </form>
 
-        <div className="text-center text-sm text-gray-600">
+        {/* <div className="text-center text-sm text-gray-600">
           Don't have an account?{" "}
           <a
             href="/register"
@@ -174,7 +174,7 @@ const Login = () => {
           >
             Sign up
           </a>
-        </div>
+        </div>*/}
       </div>
     </div>
   );
