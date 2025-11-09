@@ -44,7 +44,7 @@ export default function Sent() {
       } catch (err) {
         // TODO: since we tell axios to always treat all response as blob, if server response an json error, we cant read the error message
         if (isMounted) {
-          setError(`Failed to load documents. ${err.message}`);
+          setError(`Gagal dalam load dokumen. ${err.message}`);
         }
       } finally {
         if (isMounted) {
@@ -66,7 +66,9 @@ export default function Sent() {
         );
         setUsers(response.data);
       } catch (err) {
-        setError(`Error getting all user. ${err.response?.data?.message}`);
+        setError(
+          `Error dalam mendapatkan semua user. ${err.response?.data?.message}`,
+        );
       }
     };
     fetchUsers();
@@ -252,7 +254,7 @@ export default function Sent() {
                 ⬅️
               </button>
               <span>
-                Page {pageNumber} / {numPages}
+                Halaman {pageNumber} / {numPages}
               </span>
               <button
                 disabled={pageNumber >= numPages}
@@ -338,29 +340,6 @@ export default function Sent() {
           </div>
         </div>
       )}
-
-      {/* {slotModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 text-black">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4">
-            <div className="max-h-60 overflow-x-auto space-y-2">
-              {count > 1 &&
-                [...Array(count).keys()].map((index) => (
-                  <button
-                    type="button"
-                    class="py-2.5 px-5 text-sm font-medium bg-inherit rounded-lg hover:bg-slate-200 w-full text-left"
-                    onClick={() => {
-                      // setSelectedUser(user._id);
-                      // console.log(selectedUser, user._id);
-                      setSlotModal(false);
-                    }}
-                  >
-                    {index}
-                  </button>
-                ))}
-            </div>
-          </div>
-        </div>
-      )}*/}
     </main>
   );
 }

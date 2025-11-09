@@ -51,7 +51,7 @@ export default function Documents() {
       );
       setUsers(response.data);
     } catch (err) {
-      setError(`Failed to load users. ${err.response?.data?.message}`);
+      setError(`Gagal dalam load user. ${err.response?.data?.message}`);
     } finally {
       setLoading(false);
     }
@@ -125,7 +125,7 @@ export default function Documents() {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search user..."
+                placeholder="Cari user..."
                 className="w-full pl-8"
               />
             </div>

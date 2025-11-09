@@ -61,7 +61,7 @@ export default function Documents() {
       );
       setDocumentsSigned(r.data);
     } catch (err) {
-      setError(`Failed to load documents. ${err.response?.data?.message}`);
+      setError(`Gagal dalam load dokumen. ${err.response?.data?.message}`);
     } finally {
       setLoading(false);
     }
@@ -99,7 +99,7 @@ export default function Documents() {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search documents..."
+                placeholder="Cari dokumen..."
                 className="w-full pl-8"
               />
             </div>
@@ -116,9 +116,9 @@ export default function Documents() {
                 <TableHead>Deskripsi</TableHead>
                 <TableHead>Nomor</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Division</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Date Completed</TableHead>
+                <TableHead>Divisi</TableHead>
+                <TableHead>Tipe</TableHead>
+                <TableHead>Tanggal Complete</TableHead>
                 <TableHead className="w-[70px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -177,7 +177,7 @@ export default function Documents() {
                           onClick={() => viewDoc(document._id, document.title)}
                         >
                           <Eye className="mr-2 h-4 w-4" />
-                          <span>View</span>
+                          <span>Lihat</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Download className="mr-2 h-4 w-4" />
@@ -185,7 +185,7 @@ export default function Documents() {
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Trash className="mr-2 h-4 w-4" />
-                          <span>Delete</span>
+                          <span>Hapus</span>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -206,9 +206,9 @@ export default function Documents() {
               <TableRow>
                 <TableHead>Deskripsi</TableHead>
                 <TableHead>Nomor</TableHead>
-                <TableHead>Division</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Date Signed</TableHead>
+                <TableHead>Divisi</TableHead>
+                <TableHead>Tipe</TableHead>
+                <TableHead>Tanggal Tanda Tangan</TableHead>
                 <TableHead className="w-[70px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -243,15 +243,11 @@ export default function Documents() {
                           onClick={() => viewDoc(document._id, document.title)}
                         >
                           <Eye className="mr-2 h-4 w-4" />
-                          <span>View</span>
+                          <span>Lihat</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Download className="mr-2 h-4 w-4" />
                           <span>Download</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Trash className="mr-2 h-4 w-4" />
-                          <span>Delete</span>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

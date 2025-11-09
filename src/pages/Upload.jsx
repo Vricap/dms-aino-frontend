@@ -56,7 +56,7 @@ const Upload = () => {
     setError("");
 
     if (!file || !type || !description) {
-      setError("Please fill in all fields");
+      setError("Tolong isi semua kolom!");
       return;
     }
 
@@ -107,10 +107,12 @@ const Upload = () => {
         <form onSubmit={handleSubmit}>
           {/* File */}
           <div className="mb-4">
-            <label className="block mb-1 font-medium">Select File</label>
+            <label className="block mb-1 font-medium">
+              Pilih File: <em>(.pdf)</em>
+            </label>
             <input
               type="file"
-              accept=".pdf,.doc,.docx" // TODO: what file types do we support?
+              accept=".pdf" // TODO: what file types do we support?
               onChange={(e) => setFile(e.target.files[0])}
               required
               className="block w-full border rounded px-3 py-2"
@@ -119,14 +121,14 @@ const Upload = () => {
 
           {/* Document Type */}
           <div className="mb-4">
-            <label className="block mb-1 font-medium">Document Type</label>
+            <label className="block mb-1 font-medium">Tipe Dokumen:</label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
               required
               className="block w-full border rounded px-3 py-2 bg-background"
             >
-              <option value="">Select Type</option>
+              <option value="">Pilih Tipe</option>
               {Object.keys(types).map((key) => (
                 <option key={key} value={key}>
                   {/* {key.charAt(0).toUpperCase() + key.slice(1)}*/}
@@ -156,14 +158,14 @@ const Upload = () => {
 
           {/* Description */}
           <div className="mb-4">
-            <label className="block mb-1 font-medium">Description</label>
+            <label className="block mb-1 font-medium">Deskripsi:</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
               rows="4"
               className="block w-full border rounded px-3 py-2 bg-background"
-              placeholder="Enter document description..."
+              placeholder="Masukan deskripsi dokumen..."
             ></textarea>
           </div>
 
@@ -173,7 +175,7 @@ const Upload = () => {
             disabled={isLoading}
             className={`w-full bg-black text-white px-4 py-2 rounded hover:bg-black border border-t-green-300 ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`}
           >
-            {isLoading ? "Uploading..." : "Upload Document"}
+            {isLoading ? "Uploading..." : "Upload Dokumen"}
           </button>
         </form>
       </div>

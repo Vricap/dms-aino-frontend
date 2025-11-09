@@ -8,9 +8,7 @@ export function DashboardStats() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex flex-row items-center justify-between w-full">
-            <CardTitle className="text-sm font-medium">
-              Total Documents
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Total Dokumen</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </div>
         </CardHeader>
@@ -23,7 +21,7 @@ export function DashboardStats() {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex flex-row items-center justify-between w-full">
             <CardTitle className="text-sm font-medium">
-              Signed Documents
+              Dokumen Tertanda Tangani
             </CardTitle>
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </div>
@@ -37,7 +35,7 @@ export function DashboardStats() {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex flex-row items-center justify-between w-full">
             <CardTitle className="text-sm font-medium">
-              Request Signatures
+              Dokumen Complete
             </CardTitle>
             <FileSignature className="h-4 w-4 text-muted-foreground" />
           </div>
@@ -51,7 +49,7 @@ export function DashboardStats() {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="flex flex-row items-center justify-between w-full">
             <CardTitle className="text-sm font-medium">
-              Uploaded Documents
+              Dokumen Ter-upload
             </CardTitle>
             <FileSignature className="h-4 w-4 text-muted-foreground" />
           </div>

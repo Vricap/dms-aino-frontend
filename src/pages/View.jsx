@@ -166,7 +166,7 @@ export default function View() {
                 ⬅️
               </button>
               <span>
-                Page {pageNumber} / {numPages}
+                Halaman {pageNumber} / {numPages}
               </span>
               <button
                 disabled={pageNumber >= numPages}
