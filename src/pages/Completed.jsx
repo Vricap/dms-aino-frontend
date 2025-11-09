@@ -106,7 +106,7 @@ export default function Documents() {
                 <TableHead>Status</TableHead>
                 <TableHead>Division</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Date Signed</TableHead>
+                <TableHead>Date Completed</TableHead>
                 <TableHead className="w-[70px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -151,7 +151,7 @@ export default function Documents() {
                   </TableCell>
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
-                  <TableCell>{document.receiver.dateSigned}</TableCell>
+                  <TableCell>{document.dateComplete}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

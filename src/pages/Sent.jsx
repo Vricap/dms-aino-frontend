@@ -14,8 +14,11 @@ export default function Sent() {
   const [pointerPos, setPointerPos] = useState([]);
   const [users, setUsers] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedUser, setSelectedUser] = useState({});
+  const [count, setCount] = useState(0);
+  const [slotModal, setSlotModal] = useState(false);
   const navigate = useNavigate();
+  let i = 1;
 
   const containerRef = useRef();
   const location = useLocation();
@@ -91,7 +94,9 @@ export default function Sent() {
   }
 
   function clearSign() {
+    setCount(0);
     setPointerPos([]);
+    setSelectedUser({});
   }
 
   function handleDrop(e) {
@@ -109,36 +114,52 @@ export default function Sent() {
     const width = 120;
     const height = 50;
 
+    setCount(count + 1);
+
     const pos = {
       page: pageNumber,
       x: pdfX,
       y: pdfY,
       width,
       height,
+      count,
     };
-
     setPointerPos([...pointerPos, pos]);
     // onSave(pos); // send to backend or store in parent
   }
 
   const sentRequest = async () => {
-    if (pointerPos.length === 0 || !selectedUser) {
+    if (pointerPos.length === 0 || Object.keys(selectedUser).length < 1) {
       alert(
         "Letakkan tempat tanda tangan dan pilih penerima sebelum mengirim.",
       );
       return;
     }
 
+    if (Object.keys(selectedUser).length !== count) {
+      alert(
+        `Tidak cocok! Jumlah penerima: ${Object.keys(selectedUser).length}. Jumlah ttd: ${count}`,
+      );
+    }
+
     const dateSent = new Date();
-    const receiver = { user: selectedUser, dateSent };
+    const data = [];
+
+    for (const key in selectedUser) {
+      const pos = pointerPos.filter((obj) => obj.count === key * 1); // i think its impossilbe an error will happen here. it will always match
+      data.push({
+        urutan: key * 1 + 1,
+        user: selectedUser[key],
+        dateSent,
+        pointer: pos[0],
+      });
+    }
 
     try {
       await axios.put(
         process.env.REACT_APP_BASE_URL + `/documents/${id}`,
         {
-          status: "sent",
-          receiver: receiver,
-          pointer: pointerPos,
+          data,
         },
         {
           headers: {
@@ -163,12 +184,14 @@ export default function Sent() {
           </p>
 
           <div className="flex gap-6 justify-end">
-            <button
-              className="px-4 py-2 bg-blue-600 text-white rounded"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Pilih Penerima
-            </button>
+            {count > 0 && (
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Pilih Penerima
+              </button>
+            )}
 
             <button
               className="px-4 py-2 bg-blue-600 text-white rounded"
@@ -212,7 +235,7 @@ export default function Sent() {
                         position: "absolute",
                       }}
                     >
-                      TTD Disini
+                      TTD Disini {i++}
                     </div>
                   ) : null,
                 )}
@@ -267,28 +290,33 @@ export default function Sent() {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 text-black">
           <div className="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4">
-            <h3 className="text-lg font-semibold">Select Users</h3>
-            <div className="max-h-60 overflow-y-auto space-y-2">
-              {users &&
-                users.rows.map((user) => (
-                  <label key={user._id} className="block">
-                    <input
-                      type="radio"
-                      className="mr-2"
-                      checked={selectedUser.includes(user._id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedUser(user._id);
-                        }
-                        // else {
-                        //   setSelectedUser((prev) =>
-                        //     prev.filter((id) => id !== user._id),
-                        //   );
-                        // }
-                      }}
-                    />
-                    {user.username || user.email}
-                  </label>
+            <h3 className="text-lg font-semibold">
+              Pilih Penerima dan Tentukan Urutan
+            </h3>
+            <span>Jumlah tanda tangan: {count}</span>
+            <div className="max-h-800 overflow-y-auto space-y-2">
+              {count &&
+                [...Array(count)].map((val, i) => (
+                  <div className="mb-4">
+                    <label className="mb-1 font-medium">
+                      Pilih urutan ke {i + 1}:
+                    </label>
+                    <select
+                      // value={type}
+                      onChange={(e) => (selectedUser[i] = e.target.value)}
+                      defaultValue={selectedUser[i] && selectedUser[i]}
+                      required
+                      className="w-full rounded px-3 py-2 mb-2"
+                    >
+                      <option value="">Pilih Penerima</option>
+                      {users &&
+                        users.rows.map((user) => (
+                          <option key={user._id} value={user._id}>
+                            {`${user.username} (${user.email}, ${user.division})`}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
                 ))}
             </div>
             <div className="flex justify-end gap-2">
@@ -301,7 +329,6 @@ export default function Sent() {
               <button
                 onClick={() => {
                   setIsModalOpen(false);
-                  // console.log("Selected users:", selectedUsers);
                 }}
                 className="px-3 py-1 bg-blue-600 rounded text-white"
               >
@@ -311,6 +338,29 @@ export default function Sent() {
           </div>
         </div>
       )}
+
+      {/* {slotModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 text-black">
+          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4">
+            <div className="max-h-60 overflow-x-auto space-y-2">
+              {count > 1 &&
+                [...Array(count).keys()].map((index) => (
+                  <button
+                    type="button"
+                    class="py-2.5 px-5 text-sm font-medium bg-inherit rounded-lg hover:bg-slate-200 w-full text-left"
+                    onClick={() => {
+                      // setSelectedUser(user._id);
+                      // console.log(selectedUser, user._id);
+                      setSlotModal(false);
+                    }}
+                  >
+                    {index}
+                  </button>
+                ))}
+            </div>
+          </div>
+        </div>
+      )}*/}
     </main>
   );
 }

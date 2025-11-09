@@ -35,24 +35,7 @@ export default function Documents() {
   const navigate = useNavigate();
 
   const viewDoc = (id, title) => {
-    navigate("/view", { state: { id: id, title: title } });
-  };
-
-  const signDocument = async (id) => {
-    try {
-      await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/documents/sign/${id}`,
-        {
-          headers: {
-            "x-access-token": localStorage.getItem("token"),
-          },
-        },
-      );
-      alert(`Tanda tangan dokumen BERHASIL!`);
-      navigate("/inbox");
-    } catch (err) {
-      alert(`Tanda tangan dokumen GAGAL! ${err.response.data.message}`);
-    }
+    navigate("/view", { state: { id: id, title: title, signing: true } });
   };
 
   useEffect(() => {
@@ -141,11 +124,11 @@ export default function Documents() {
                   </TableCell>
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
-                  <TableCell>{document.receiver.dateSent}</TableCell>
+                  <TableCell>{document.dateSent}</TableCell>
                   <TableCell>
                     <button
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                      onClick={() => signDocument(document._id)}
+                      onClick={() => viewDoc(document._id, document.title)}
                     >
                       SIGN
                     </button>

@@ -1,5 +1,5 @@
 import { Document, Page } from "react-pdf";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -10,10 +10,29 @@ export default function View() {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
-  const [pointerPos, setPointerPos] = useState([]);
+  const [data, setData] = useState([]);
+  const [current, setCurrent] = useState("");
+  const navigate = useNavigate();
 
   const location = useLocation();
-  const { id, title } = location.state || {};
+  const { id, title, signing } = location.state || {};
+
+  const signDocument = async (id) => {
+    try {
+      await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/documents/sign/${id}`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        },
+      );
+      alert(`Tanda tangan dokumen BERHASIL!`);
+      navigate("/completed");
+    } catch (err) {
+      alert(`Tanda tangan dokumen GAGAL! ${err.response.data.message}`);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -29,10 +48,11 @@ export default function View() {
             responseType: "blob",
           },
         );
-        if (isMounted) {
-          if ("x-meta-info" in response.headers) {
+        if ("x-meta-info" in response.headers) {
+          if (isMounted) {
             const meta = JSON.parse(response.headers.get("X-Meta-Info"));
-            setPointerPos(meta.message);
+            setCurrent(meta.message.current);
+            setData(meta.message.data);
           }
           setblobUrl(URL.createObjectURL(response.data));
         }
@@ -75,12 +95,23 @@ export default function View() {
     <main className="container mx-auto py-6 px-4 md:px-6">
       <div className="flex flex-col gap-6">
         <div className="space-y-2">
-          <h2 className="text-lg font-bold">Lihat Dokumen</h2>
+          <h2 className="text-lg font-bold">
+            {signing ? "Tanda Tangan" : "Lihat"} Dokumen
+          </h2>
           <p className="text-muted-foreground">
             <em>{title}</em>
           </p>
 
-          <div className="flex gap-6 justify-end"></div>
+          <div className="flex gap-6 justify-end">
+            {signing && (
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+                onClick={() => signDocument(id)}
+              >
+                Tanda Tangan
+              </button>
+            )}
+          </div>
 
           <div className="inline-block mr-16 opacity-0">
             foo bar buz .........
@@ -95,24 +126,34 @@ export default function View() {
               />
             </Document>
 
-            {/* TODO: pointerPos is now an array and EMPTY array is TRUTHY*/}
-            {pointerPos &&
-              pointerPos.map((pos, index) =>
-                pos.page === pageNumber ? (
-                  <div
-                    className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
-                    style={{
-                      left: `${(pos.x / pageDims.width) * 100}%`,
-                      top: `${((pageDims.height - pos.y) / pageDims.height) * 100}%`,
-                      width: `${(pos.width / pageDims.width) * 100}%`,
-                      height: `${(pos.height / pageDims.height) * 100}%`,
-                      position: "absolute",
-                    }}
-                  >
-                    TTD Disini
-                  </div>
-                ) : null,
-              )}
+            {/* TODO: data is now an array and EMPTY array is TRUTHY*/}
+            {data &&
+              data.map((obj, index) => {
+                if (
+                  obj.pointer.page === pageNumber &&
+                  obj.user === localStorage.getItem("id") &&
+                  obj.urutan === current &&
+                  !obj.signed
+                ) {
+                  return (
+                    <div
+                      key={index}
+                      className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
+                      style={{
+                        left: `${(obj.pointer.x / pageDims.width) * 100}%`,
+                        top: `${((pageDims.height - obj.pointer.y) / pageDims.height) * 100}%`,
+                        width: `${(obj.pointer.width / pageDims.width) * 100}%`,
+                        height: `${(obj.pointer.height / pageDims.height) * 100}%`,
+                        position: "absolute",
+                      }}
+                    >
+                      TTD Disini
+                    </div>
+                  );
+                } else {
+                  return null;
+                }
+              })}
           </div>
 
           <div className="flex justify-between">
