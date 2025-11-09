@@ -30,6 +30,7 @@ import {
 
 export default function Documents() {
   const [documents, setDocuments] = useState(null);
+  const [documentsSigned, setDocumentsSigned] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -38,25 +39,35 @@ export default function Documents() {
     navigate("/view", { state: { id: id, title: title } });
   };
 
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/documents/?status=complete`,
-          {
-            headers: {
-              "x-access-token": localStorage.getItem("token"),
-            },
+  const fetchDocuments = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/documents/?status=complete`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
           },
-        );
-        setDocuments(response.data);
-      } catch (err) {
-        setError(`Failed to load documents. ${err.response?.data?.message}`);
-      } finally {
-        setLoading(false);
-      }
-    };
+        },
+      );
+      setDocuments(response.data);
 
+      const r = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/documents/signed`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        },
+      );
+      setDocumentsSigned(r.data);
+    } catch (err) {
+      setError(`Failed to load documents. ${err.response?.data?.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchDocuments();
   }, []);
 
@@ -74,7 +85,8 @@ export default function Documents() {
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold tracking-tight">Completed</h1>
           <p className="text-muted-foreground">
-            Dokumen yang sudah di tanda tangani.{" "}
+            Dokumen yang <strong>kamu upload</strong> dan sudah di tanda tangani
+            semua.{" "}
             {localStorage.getItem("role") === "admin"
               ? "Role kamu adalah Admin. Kamu dapat melihat semua dokumen yang 'complete' dari semua user."
               : ""}
@@ -97,7 +109,7 @@ export default function Documents() {
           </div>
         </div>
 
-        <div className="rounded-md border">
+        <div className="rounded-md border mb-4">
           <Table>
             <TableHeader>
               <TableRow>
@@ -152,6 +164,72 @@ export default function Documents() {
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
                   <TableCell>{document.dateComplete}</TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Open menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => viewDoc(document._id, document.title)}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          <span>View</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Download className="mr-2 h-4 w-4" />
+                          <span>Download</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Trash className="mr-2 h-4 w-4" />
+                          <span>Delete</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        <p className="text-muted-foreground">
+          Dokumen dari <strong>orang lain</strong> yang sudah pernah kamu tanda
+          tangani:{" "}
+        </p>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Deskripsi</TableHead>
+                <TableHead>Nomor</TableHead>
+                <TableHead>Division</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Date Signed</TableHead>
+                <TableHead className="w-[70px]"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {documentsSigned.map((document) => (
+                <TableRow key={document._id}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <FileText className="h-5 w-5 text-primary" />
+                      <span className="font-medium">{document.content}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <FileText className="h-5 w-5 text-primary" />
+                      <span className="font-medium">{document.title}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>{document.division}</TableCell>
+                  <TableCell>{document.type}</TableCell>
+                  <TableCell>{document.dateSigned}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
