@@ -34,6 +34,27 @@ export default function Documents() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const downloadDoc = async (id, title) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/documents/blob/${id}`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+          responseType: "blob", // Tell axios to treat the response as a Blob
+        },
+      );
+      const fileURL = window.URL.createObjectURL(response.data);
+      let alink = document.createElement("a");
+      alink.href = fileURL;
+      alink.download = title;
+      alink.click();
+    } catch (err) {
+      alert(`Gagal dalam download dokumen. ${err.response?.data?.message}`);
+    }
+  };
+
   const viewDoc = (id, title) => {
     navigate("/view", { state: { id: id, title: title, signing: true } });
   };
@@ -148,7 +169,11 @@ export default function Documents() {
                           <Eye className="mr-2 h-4 w-4" />
                           <span>Lihat</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            downloadDoc(document._id, document.title)
+                          }
+                        >
                           <Download className="mr-2 h-4 w-4" />
                           <span>Download</span>
                         </DropdownMenuItem>

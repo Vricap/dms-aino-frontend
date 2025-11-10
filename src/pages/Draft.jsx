@@ -37,6 +37,59 @@ export default function Documents() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const fetchDocuments = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/documents/?status=saved,sent`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        },
+      );
+      setDocuments(response.data);
+    } catch (err) {
+      setError(`Gagal dalam load dokumen. ${err.response?.data?.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const downloadDoc = async (id, title) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/documents/blob/${id}`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+          responseType: "blob", // Tell axios to treat the response as a Blob
+        },
+      );
+      const fileURL = window.URL.createObjectURL(response.data);
+      let alink = document.createElement("a");
+      alink.href = fileURL;
+      alink.download = title;
+      alink.click();
+    } catch (err) {
+      alert(`Gagal dalam download dokumen. ${err.response?.data?.message}`);
+    }
+  };
+
+  const deleteDoc = async (id) => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_BASE_URL}/documents/${id}`, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      });
+      alert("Dokumen berhasil di hapus!");
+      await fetchDocuments();
+    } catch (err) {
+      alert(`Gagal dalam menghapus dokumen. ${err.response?.data?.message}`);
+    }
+  };
+
   const handleSent = (id, title) => {
     navigate("/sent", { state: { id: id, title: title } });
   };
@@ -46,24 +99,6 @@ export default function Documents() {
   };
 
   useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/documents/?status=saved,sent`,
-          {
-            headers: {
-              "x-access-token": localStorage.getItem("token"),
-            },
-          },
-        );
-        setDocuments(response.data);
-      } catch (err) {
-        setError(`Gagal dalam load dokumen. ${err.response?.data?.message}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDocuments();
   }, []);
 
@@ -183,11 +218,17 @@ export default function Documents() {
                           <Eye className="mr-2 h-4 w-4" />
                           <span>Lihat</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            downloadDoc(document._id, document.title)
+                          }
+                        >
                           <Download className="mr-2 h-4 w-4" />
                           <span>Download</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => deleteDoc(document._id)}
+                        >
                           <Trash className="mr-2 h-4 w-4" />
                           <span>Hapus</span>
                         </DropdownMenuItem>
