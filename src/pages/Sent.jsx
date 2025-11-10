@@ -16,9 +16,7 @@ export default function Sent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
   const [count, setCount] = useState(0);
-  const [slotModal, setSlotModal] = useState(false);
   const navigate = useNavigate();
-  let i = 1;
 
   const containerRef = useRef();
   const location = useLocation();
@@ -237,7 +235,7 @@ export default function Sent() {
                         position: "absolute",
                       }}
                     >
-                      TTD Disini {i++}
+                      TTD Disini {count}
                     </div>
                   ) : null,
                 )}

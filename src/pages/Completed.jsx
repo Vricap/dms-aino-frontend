@@ -121,7 +121,7 @@ export default function Documents() {
           <h1 className="text-3xl font-bold tracking-tight">Completed</h1>
           <p className="text-muted-foreground">
             Dokumen yang <strong>kamu upload</strong> dan sudah di tanda tangani
-            semua.{" "}
+            oleh semua penerima.{" "}
             {localStorage.getItem("role") === "admin"
               ? "Role kamu adalah Admin. Kamu dapat melihat semua dokumen yang 'complete' dari semua user."
               : ""}
@@ -238,8 +238,11 @@ export default function Documents() {
         </div>
 
         <p className="text-muted-foreground">
-          Dokumen dari <strong>orang lain</strong> yang sudah pernah kamu tanda
-          tangani:{" "}
+          Seluruh dokumen yang <strong>pernah</strong> kamu tanda tangani,{" "}
+          <strong>
+            <em>dari kamu maupun orang lain</em>
+          </strong>
+          :
         </p>
         <div className="rounded-md border">
           <Table>
