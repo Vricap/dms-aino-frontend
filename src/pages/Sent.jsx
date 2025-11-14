@@ -17,6 +17,8 @@ export default function Sent() {
   const [selectedUser, setSelectedUser] = useState({});
   const [count, setCount] = useState(0);
   const navigate = useNavigate();
+  // let signCounterRef = 1;
+  const signCounterRef = useRef(1); // use ref so that the value persist at every render
 
   const containerRef = useRef();
   const location = useLocation();
@@ -97,6 +99,7 @@ export default function Sent() {
     setCount(0);
     setPointerPos([]);
     setSelectedUser({});
+    signCounterRef.current = 1;
   }
 
   function handleDrop(e) {
@@ -123,6 +126,7 @@ export default function Sent() {
       width,
       height,
       count,
+      number: signCounterRef.current++,
     };
     setPointerPos([...pointerPos, pos]);
     // onSave(pos); // send to backend or store in parent
@@ -235,7 +239,7 @@ export default function Sent() {
                         position: "absolute",
                       }}
                     >
-                      TTD Disini {count}
+                      TTD Disini {pos.number}
                     </div>
                   ) : null,
                 )}
@@ -247,7 +251,9 @@ export default function Sent() {
             <div className="flex space-x-2 p-2">
               <button
                 disabled={pageNumber <= 1}
-                onClick={() => setPageNumber((p) => p - 1)}
+                onClick={() => {
+                  return setPageNumber((p) => p - 1);
+                }}
               >
                 ⬅️
               </button>
@@ -256,7 +262,9 @@ export default function Sent() {
               </span>
               <button
                 disabled={pageNumber >= numPages}
-                onClick={() => setPageNumber((p) => p + 1)}
+                onClick={() => {
+                  return setPageNumber((p) => p + 1);
+                }}
               >
                 ➡️
               </button>
