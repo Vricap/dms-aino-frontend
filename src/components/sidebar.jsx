@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "../lib/utils";
 import {
   FileText,
-  // FileSignature,
+  FileSignature,
   // Users,
   // Settings,
   LayoutDashboard,
@@ -29,6 +29,11 @@ const sidebarItems = [
     title: "Draft",
     href: "/draft",
     icon: FileText,
+  },
+  {
+    title: "Sent",
+    href: "/send",
+    icon: FileSignature,
   },
   {
     title: "Inbox",

@@ -40,7 +40,7 @@ export default function Documents() {
   const fetchDocuments = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/documents/?status=saved,sent`,
+        `${process.env.REACT_APP_BASE_URL}/documents/?status=saved`,
         {
           headers: {
             "x-access-token": localStorage.getItem("token"),
@@ -86,7 +86,10 @@ export default function Documents() {
       alert("Dokumen berhasil di hapus!");
       await fetchDocuments();
     } catch (err) {
-      alert(`Gagal dalam menghapus dokumen. ${err.response?.data?.message}`);
+      alert(
+        `Terjadi kesalahan dalam menghapus dokumen. ${err.response?.data?.message}`,
+      );
+      await fetchDocuments();
     }
   };
 

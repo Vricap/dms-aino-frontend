@@ -13,17 +13,17 @@ import {
 } from "../components/ui/table";
 import { Search, Filter, User, Plus } from "lucide-react";
 
-const divisions = [
-  "MKT",
-  "FIN",
-  "CHC",
-  "PROD",
-  "OPS",
-  "ITINFRA",
-  "LGL",
-  "DIR",
-  "ADMIN",
-];
+const divisions = {
+  MKT: "MARKETING & SALES",
+  FIN: "FINANCE",
+  CHC: "CORP & HUMAN CAPITAL",
+  PROD: "PRODUCT & ENGINEERING",
+  OPS: "OPERATION",
+  ITINFRA: "IT INFRA & SECURITY",
+  LGL: "LEGAL",
+  DIR: "DIREKSI",
+  ADMIN: "ADMIN",
+};
 
 export default function Documents() {
   const [users, setUsers] = useState(null);
@@ -218,9 +218,10 @@ export default function Documents() {
                   required
                 >
                   <option value="">Pilih Divisi</option>
-                  {divisions.map((div) => (
-                    <option key={div} value={div}>
-                      {div}
+                  {Object.keys(divisions).map((key) => (
+                    <option key={key} value={key}>
+                      {/* {key.charAt(0).toUpperCase() + key.slice(1)}*/}
+                      {`${key} (${divisions[key]})`}
                     </option>
                   ))}
                 </select>

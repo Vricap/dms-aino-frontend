@@ -19,6 +19,7 @@ import Inbox from "./pages/Inbox.jsx";
 import Completed from "./pages/Completed.jsx";
 // import Signatures from "./pages/Signatures.jsx";
 // import Audit from "./pages/Audit.jsx";
+import Send from "./pages/Send.jsx";
 import Sent from "./pages/Sent.jsx";
 import View from "./pages/View.jsx";
 import Profile from "./pages/Profile.jsx";
@@ -87,6 +88,14 @@ function Layout() {
             />
             {/* <Route path="/signatures" element={<Signatures />} /> */}
             {/* <Route path="/audit" element={<Audit />} /> */}
+            <Route
+              path="/send"
+              element={
+                <ProtectedRoute>
+                  <Send />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/sent"
               element={

@@ -42,10 +42,22 @@ const types = {
   CL: "CONFIRMATION LETTER",
 };
 
+const divisions = {
+  MKT: "MARKETING & SALES",
+  FIN: "FINANCE",
+  CHC: "CORP & HUMAN CAPITAL",
+  PROD: "PRODUCT & ENGINEERING",
+  OPS: "OPERATION",
+  ITINFRA: "IT INFRA & SECURITY",
+  LGL: "LEGAL",
+  DIR: "DIREKSI",
+  ADMIN: "ADMIN",
+};
+
 const Upload = () => {
   const [file, setFile] = useState(null);
   const [type, setType] = useState("");
-  // const [division, setDivision] = useState("");
+  const [division, setDivision] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +75,7 @@ const Upload = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("type", type);
-    // formData.append("division", division);
+    formData.append("division", division);
     formData.append("content", description);
 
     setIsLoading(true);
@@ -139,22 +151,23 @@ const Upload = () => {
           </div>
 
           {/* Division */}
-          {/* <div className="mb-4">
+          <div className="mb-4">
             <label className="block mb-1 font-medium">Division</label>
             <select
               value={division}
               onChange={(e) => setDivision(e.target.value)}
               required
-              className="block w-full border border-gray-300 rounded px-3 py-2"
+              className="block w-full border rounded px-3 py-2 bg-background"
             >
-              <option value="">Select Type</option>
-              {divisions.map((div) => (
-                <option key={div} value={div}>
-                  {div}
+              <option value="">Pilih Division</option>
+              {Object.keys(divisions).map((key) => (
+                <option key={key} value={key}>
+                  {/* {key.charAt(0).toUpperCase() + key.slice(1)}*/}
+                  {`${key} (${divisions[key]})`}
                 </option>
               ))}
             </select>
-          </div> */}
+          </div>
 
           {/* Description */}
           <div className="mb-4">
