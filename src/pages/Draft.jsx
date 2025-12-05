@@ -55,6 +55,24 @@ export default function Documents() {
     }
   };
 
+  const viewDoc = async (id, title) => {
+    try {
+      await axios.put(
+        process.env.REACT_APP_BASE_URL + `/documents/logs/${id}/?activity=view`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem("token"),
+          },
+        },
+      );
+    } catch (err) {
+    } finally {
+      navigate("/view", { state: { id: id, title: title } });
+    }
+  };
+
   const downloadDoc = async (id, title) => {
     try {
       const response = await axios.get(
@@ -71,6 +89,18 @@ export default function Documents() {
       alink.href = fileURL;
       alink.download = title;
       alink.click();
+
+      await axios.put(
+        process.env.REACT_APP_BASE_URL +
+          `/documents/logs/${id}/?activity=download`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem("token"),
+          },
+        },
+      );
     } catch (err) {
       alert(`Gagal dalam download dokumen. ${err.response?.data?.message}`);
     }
@@ -95,10 +125,6 @@ export default function Documents() {
 
   const handleSent = (id, title) => {
     navigate("/sent", { state: { id: id, title: title } });
-  };
-
-  const viewDoc = (id, title) => {
-    navigate("/view", { state: { id: id, title: title } });
   };
 
   useEffect(() => {
