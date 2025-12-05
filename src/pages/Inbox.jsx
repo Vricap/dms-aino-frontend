@@ -123,6 +123,7 @@ export default function Documents() {
                 <TableHead>Nomor</TableHead>
                 <TableHead>Divisi</TableHead>
                 <TableHead>Tipe</TableHead>
+                <TableHead>Dari</TableHead>
                 <TableHead>Tanggal Dikirim</TableHead>
                 <TableHead className="w-[70px]"></TableHead>
                 <TableHead className="w-[70px]"></TableHead>
@@ -145,6 +146,7 @@ export default function Documents() {
                   </TableCell>
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
+                  <TableCell>{document.uploader.username}</TableCell>
                   <TableCell>{document.dateSent}</TableCell>
                   <TableCell>
                     <button
