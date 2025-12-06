@@ -29,13 +29,17 @@ import {
   // Plus,
   Filter,
   Eye,
+  History,
 } from "lucide-react";
+import useAudit from "../hooks/useAudit.jsx";
+import AuditModal from "../components/audit-modal.jsx";
 
 export default function Documents() {
   const [documents, setDocuments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { audit, auditDoc, isModalOpen, setIsModalOpen } = useAudit();
 
   const fetchDocuments = async () => {
     try {
@@ -256,6 +260,12 @@ export default function Documents() {
                           <span>Download</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem
+                          onClick={() => auditDoc(document._id)}
+                        >
+                          <History className="mr-2 h-4 w-4" />
+                          <span>Audit</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                           onClick={() => deleteDoc(document._id)}
                         >
                           <Trash className="mr-2 h-4 w-4" />
@@ -270,6 +280,11 @@ export default function Documents() {
           </Table>
         </div>
       </div>
+      <AuditModal
+        audit={audit}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </main>
   );
 }

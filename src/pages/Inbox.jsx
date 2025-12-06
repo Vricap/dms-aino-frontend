@@ -22,17 +22,20 @@ import {
   FileText,
   MoreHorizontal,
   Download,
-  Trash,
   Search,
   Filter,
   Eye,
+  History,
 } from "lucide-react";
+import useAudit from "../hooks/useAudit.jsx";
+import AuditModal from "../components/audit-modal.jsx";
 
 export default function Documents() {
   const [documents, setDocuments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { audit, auditDoc, isModalOpen, setIsModalOpen } = useAudit();
 
   const viewDoc = async (id, title) => {
     try {
@@ -48,7 +51,7 @@ export default function Documents() {
       );
     } catch (err) {
     } finally {
-      navigate("/view", { state: { id: id, title: title } });
+      navigate("/view", { state: { id: id, title: title, signing: true } });
     }
   };
 
@@ -205,6 +208,12 @@ export default function Documents() {
                           <Download className="mr-2 h-4 w-4" />
                           <span>Download</span>
                         </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => auditDoc(document._id)}
+                        >
+                          <History className="mr-2 h-4 w-4" />
+                          <span>Audit</span>
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -214,6 +223,11 @@ export default function Documents() {
           </Table>
         </div>
       </div>
+      <AuditModal
+        audit={audit}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </main>
   );
 }

@@ -172,7 +172,7 @@ export default function Sent() {
           },
         },
       );
-      navigate("/draft");
+      navigate("/send");
     } catch (err) {
       setError(`Gagal mengirim file: ${err.response?.data?.message}`);
     }
@@ -297,22 +297,22 @@ export default function Sent() {
       {/* popup for selecting users */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 text-black">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4">
+          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md space-y-4 max-h-[85vh] overflow-y-auto">
             <h3 className="text-lg font-semibold">
               Pilih Penerima dan Tentukan Urutan
             </h3>
             <span>Jumlah tanda tangan: {count}</span>
-            <div className="max-h-800 overflow-y-auto space-y-2">
+
+            <div className="max-h-[60vh] overflow-y-auto space-y-2">
               {count &&
                 [...Array(count)].map((val, i) => (
-                  <div className="mb-4">
+                  <div className="mb-4" key={i}>
                     <label className="mb-1 font-medium">
                       Pilih urutan ke {i + 1}:
                     </label>
                     <select
-                      // value={type}
                       onChange={(e) => (selectedUser[i] = e.target.value)}
-                      defaultValue={selectedUser[i] && selectedUser[i]}
+                      defaultValue={selectedUser[i]}
                       required
                       className="w-full rounded px-3 py-2 mb-2"
                     >
@@ -327,6 +327,7 @@ export default function Sent() {
                   </div>
                 ))}
             </div>
+
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -335,9 +336,7 @@ export default function Sent() {
                 Batal
               </button>
               <button
-                onClick={() => {
-                  setIsModalOpen(false);
-                }}
+                onClick={() => setIsModalOpen(false)}
                 className="px-3 py-1 bg-blue-600 rounded text-white"
               >
                 Konfirmasi
