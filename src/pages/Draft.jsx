@@ -31,8 +31,12 @@ import {
   Eye,
   History,
 } from "lucide-react";
+
+// import { DatePicker } from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 import useAudit from "../hooks/useAudit.jsx";
 import AuditModal from "../components/audit-modal.jsx";
+import FilterModal from "../components/filter-modal.jsx";
 
 export default function Documents() {
   const [documents, setDocuments] = useState(null);
@@ -40,6 +44,69 @@ export default function Documents() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { audit, auditDoc, isModalOpen, setIsModalOpen } = useAudit();
+
+  const [selectedDiv, setSelectedDiv] = useState([]);
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  // const [selectedStartDate, setSelectedStartDate] = useState(null);
+  // const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+  const handleSelectType = (key) => {
+    if (!selectedTypes.includes(key)) {
+      setSelectedTypes([key, ...selectedTypes]);
+    } else {
+      setSelectedTypes(selectedTypes.filter((v) => v !== key));
+    }
+  };
+
+  const handleSelectDiv = (key) => {
+    if (!selectedDiv.includes(key)) {
+      setSelectedDiv([key, ...selectedDiv]);
+    } else {
+      setSelectedDiv(selectedDiv.filter((v) => v !== key));
+    }
+  };
+
+  const handleFilter = async () => {
+    setLoading(true);
+    let qParam = "";
+    if (selectedDiv.length > 0) {
+      qParam += "&div=";
+      selectedDiv.forEach((el, i) => {
+        qParam += el;
+        if (!i + 1 === selectedDiv.length) {
+          qParam += ",";
+        }
+      });
+    }
+
+    if (selectedTypes.length > 0) {
+      qParam += "&typ=";
+      selectedTypes.forEach((el, i) => {
+        qParam += el;
+        if (!i + 1 === selectedTypes.length) {
+          qParam += ",";
+        }
+      });
+    }
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/documents/?status=saved${qParam}`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        },
+      );
+      setDocuments(response.data.rows);
+    } catch (err) {
+      setError(`Gagal dalam load dokumen. ${err.response?.data?.message}`);
+    } finally {
+      setLoading(false);
+      setIsFilterModalOpen(false);
+    }
+  };
 
   const fetchDocuments = async () => {
     try {
@@ -51,7 +118,7 @@ export default function Documents() {
           },
         },
       );
-      setDocuments(response.data);
+      setDocuments(response.data.rows);
     } catch (err) {
       setError(`Gagal dalam load dokumen. ${err.response?.data?.message}`);
     } finally {
@@ -166,7 +233,15 @@ export default function Documents() {
                 className="w-full pl-8"
               />
             </div>
-            <Button variant="outline" size="icon">
+            <Button
+              variant={
+                selectedDiv.length > 0 || selectedTypes.length > 0
+                  ? ""
+                  : "outline"
+              }
+              size="icon"
+              onClick={() => setIsFilterModalOpen(true)}
+            >
               <Filter className="h-4 w-4" />
             </Button>
           </div>
@@ -186,7 +261,7 @@ export default function Documents() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {documents.rows.map((document) => (
+              {documents.map((document) => (
                 <TableRow key={document._id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
@@ -280,10 +355,21 @@ export default function Documents() {
           </Table>
         </div>
       </div>
+
       <AuditModal
         audit={audit}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+      />
+
+      <FilterModal
+        open={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        handleFilter={handleFilter}
+        selectedTypes={selectedTypes}
+        selectedDiv={selectedDiv}
+        handleSelectType={handleSelectType}
+        handleSelectDiv={handleSelectDiv}
       />
     </main>
   );
