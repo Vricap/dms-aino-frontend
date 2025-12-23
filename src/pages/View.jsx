@@ -15,7 +15,7 @@ export default function View() {
   const navigate = useNavigate();
 
   const location = useLocation();
-  const { id, title, signing } = location.state || {};
+  let { id, title, signing } = location.state || {};
 
   const signDocument = async (id) => {
     try {
@@ -28,7 +28,8 @@ export default function View() {
         },
       );
       alert(`Tanda tangan dokumen BERHASIL!`);
-      navigate("/completed");
+      navigate("/view", { state: { id: id, title: title, signing: false } });
+      // navigate("/completed");
     } catch (err) {
       alert(`Tanda tangan dokumen GAGAL! ${err.response.data.message}`);
     }
@@ -51,8 +52,8 @@ export default function View() {
         if ("x-meta-info" in response.headers) {
           if (isMounted) {
             const meta = JSON.parse(response.headers.get("X-Meta-Info"));
-            setCurrent(meta.message.current);
-            setData(meta.message.data);
+            setCurrent(meta.current);
+            setData(meta.receiver);
           }
           setblobUrl(URL.createObjectURL(response.data));
         }
@@ -72,7 +73,7 @@ export default function View() {
     return () => {
       isMounted = false;
     };
-  }, [id]);
+  }, [id, signing]);
 
   if (loading) {
     return <p className="p-4">Loading documents...</p>;
@@ -126,34 +127,26 @@ export default function View() {
               />
             </Document>
 
-            {/* TODO: data is now an array and EMPTY array is TRUTHY*/}
             {data &&
-              data.map((obj, index) => {
-                if (
-                  obj.pointer.page === pageNumber &&
-                  obj.user === localStorage.getItem("id") &&
-                  obj.urutan === current &&
-                  !obj.signed
-                ) {
-                  return (
-                    <div
-                      key={index}
-                      className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
-                      style={{
-                        left: `${(obj.pointer.x / pageDims.width) * 100}%`,
-                        top: `${((pageDims.height - obj.pointer.y) / pageDims.height) * 100}%`,
-                        width: `${(obj.pointer.width / pageDims.width) * 100}%`,
-                        height: `${(obj.pointer.height / pageDims.height) * 100}%`,
-                        position: "absolute",
-                      }}
-                    >
-                      TTD Disini
-                    </div>
-                  );
-                } else {
-                  return null;
-                }
-              })}
+              Object.keys(data).length !== 0 &&
+              data.pointer.page === pageNumber &&
+              data.user === localStorage.getItem("id") &&
+              data.urutan === current &&
+              !data.signed && (
+                <div
+                  key={data.user._id}
+                  className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
+                  style={{
+                    left: `${(data.pointer.x / pageDims.width) * 100}%`,
+                    top: `${((pageDims.height - data.pointer.y) / pageDims.height) * 100}%`,
+                    width: `${(data.pointer.width / pageDims.width) * 100}%`,
+                    height: `${(data.pointer.height / pageDims.height) * 100}%`,
+                    position: "absolute",
+                  }}
+                >
+                  TTD Disini
+                </div>
+              )}
           </div>
 
           <div className="flex justify-between">

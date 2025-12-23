@@ -133,6 +133,15 @@ export default function Sent() {
   }
 
   const sentRequest = async () => {
+    // TODO: quick hack
+    const cleanedSelectedUser = Object.values(selectedUser).filter(Boolean); // because "Pilih Penerima" dropdown option value is "", thus we need to filter out that.
+    if (Object.keys(cleanedSelectedUser).length !== count) {
+      alert(
+        `Tidak cocok! Jumlah penerima: ${Object.keys(cleanedSelectedUser).length}. Jumlah ttd: ${count}`,
+      );
+      return;
+    }
+
     if (pointerPos.length === 0 || Object.keys(selectedUser).length < 1) {
       alert(
         "Letakkan tempat tanda tangan dan pilih penerima sebelum mengirim.",
@@ -144,6 +153,7 @@ export default function Sent() {
       alert(
         `Tidak cocok! Jumlah penerima: ${Object.keys(selectedUser).length}. Jumlah ttd: ${count}`,
       );
+      return;
     }
 
     const dateSent = new Date();

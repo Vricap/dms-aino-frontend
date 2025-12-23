@@ -139,7 +139,7 @@ export default function Dashboard() {
       <Button className="mt-4 text-left p-1" variant="outline">
         <select className="bg-background w-full h-full p-2">
           <option key="all" value="all" onClick={() => fetchDocuments("all")}>
-            Semua
+            Kapan Saja
           </option>
           <option
             key="daily"

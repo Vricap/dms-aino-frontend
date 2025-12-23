@@ -349,11 +349,7 @@ export default function Documents() {
         </div>
 
         <p className="text-muted-foreground">
-          Seluruh dokumen yang <strong>pernah</strong> kamu tanda tangani,{" "}
-          <strong>
-            <em>dari kamu maupun orang lain</em>
-          </strong>
-          :
+          Seluruh dokumen yang <strong>pernah</strong> kamu tanda tangani:
         </p>
         <div className="rounded-md border">
           <Table>
