@@ -68,20 +68,14 @@ export default function Documents() {
     if (selectedDiv.length > 0) {
       qParam += "&div=";
       selectedDiv.forEach((el, i) => {
-        qParam += el;
-        if (!i + 1 === selectedDiv.length) {
-          qParam += ",";
-        }
+        qParam += el + ",";
       });
     }
 
     if (selectedTypes.length > 0) {
       qParam += "&typ=";
       selectedTypes.forEach((el, i) => {
-        qParam += el;
-        if (!i + 1 === selectedTypes.length) {
-          qParam += ",";
-        }
+        qParam += el + ",";
       });
     }
 
@@ -218,10 +212,7 @@ export default function Documents() {
           <h1 className="text-3xl font-bold tracking-tight">Completed</h1>
           <p className="text-muted-foreground">
             Dokumen yang <strong>kamu upload</strong> dan sudah di tanda tangani
-            oleh semua penerima.{" "}
-            {localStorage.getItem("role") === "admin"
-              ? "Role kamu adalah Admin. Kamu dapat melihat semua dokumen yang 'complete' dari semua user."
-              : ""}
+            oleh semua penerima.
           </p>
         </div>
 

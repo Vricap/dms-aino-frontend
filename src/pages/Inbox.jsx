@@ -66,20 +66,14 @@ export default function Documents() {
     if (selectedDiv.length > 0) {
       qParam += "&div=";
       selectedDiv.forEach((el, i) => {
-        qParam += el;
-        if (!i + 1 === selectedDiv.length) {
-          qParam += ",";
-        }
+        qParam += el + ",";
       });
     }
 
     if (selectedTypes.length > 0) {
       qParam += "&typ=";
       selectedTypes.forEach((el, i) => {
-        qParam += el;
-        if (!i + 1 === selectedTypes.length) {
-          qParam += ",";
-        }
+        qParam += el + ",";
       });
     }
 

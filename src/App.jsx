@@ -24,6 +24,7 @@ import Sent from "./pages/Sent.jsx";
 import View from "./pages/View.jsx";
 import Profile from "./pages/Profile.jsx";
 import Users from "./pages/Users.jsx";
+import Documents from "./pages/Documents.jsx";
 import EditUser from "./pages/EditUser.jsx";
 import ProtectedRoute from "./components/protected-routes.jsx";
 
@@ -118,6 +119,16 @@ function Layout() {
                 element={
                   <ProtectedRoute>
                     <Users />
+                  </ProtectedRoute>
+                }
+              />
+            )}
+            {localStorage.getItem("role") === "admin" && (
+              <Route
+                path="/documents"
+                element={
+                  <ProtectedRoute>
+                    <Documents />
                   </ProtectedRoute>
                 }
               />

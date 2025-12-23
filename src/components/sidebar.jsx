@@ -12,6 +12,7 @@ import {
   UploadIcon,
   FileCheck,
   User,
+  FileBox,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -91,7 +92,7 @@ export function Sidebar() {
           ))}
           {localStorage.getItem("role") === "admin" && (
             <Link
-              key={sidebarItems.length}
+              key={sidebarItems.length - 1}
               to="/users"
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
@@ -102,6 +103,21 @@ export function Sidebar() {
             >
               <User className="h-5 w-5" />
               Users
+            </Link>
+          )}
+          {localStorage.getItem("role") === "admin" && (
+            <Link
+              key={sidebarItems.length}
+              to="/documents"
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+                location.pathname === "/documents"
+                  ? "bg-accent text-accent-foreground"
+                  : "transparent",
+              )}
+            >
+              <FileBox className="h-5 w-5" />
+              Documents
             </Link>
           )}
         </nav>

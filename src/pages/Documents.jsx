@@ -17,6 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
+import { Badge } from "../components/ui/badge";
 import {
   FileText,
   // FileSignature,
@@ -30,9 +31,65 @@ import {
   Eye,
   History,
 } from "lucide-react";
+
+// import { DatePicker } from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 import useAudit from "../hooks/useAudit.jsx";
 import AuditModal from "../components/audit-modal.jsx";
-import FilterModal from "../components/filter-modal.jsx";
+
+const types = {
+  ADD: "ADDENDUM",
+  BA: "BERITA ACARA",
+  SKU: "SURAT KUASA",
+  JO: "JOB ORDER",
+  KK: "KONTRAK KERJA",
+  KW: "KWITANSI",
+  MOM: "MINUTES OF MEETING",
+  MOU: "MEMORANDUM OF UNDERSTANDING",
+  NC: "NOTA CAPAIAN",
+  ND: "NOTA DINAS",
+  PENG: "PENGADUAN",
+  PEM: "PEMBERITAHUAN",
+  PB: "PENERIMAAN BARANG",
+  PM: "PERMOHONAN",
+  PN: "PENOLAKAN",
+  NDA: "PERJANJIAN KERAHASIAAN",
+  PKS: "PERJANJIAN KERJA SAMA",
+  PR: "PERKENALAN",
+  PNW: "PENERANGAN",
+  PO: "PURCHASE ORDER",
+  PT: "PENGANTAR",
+  SK: "SURAT KEPUTUSAN",
+  SKT: "SURAT KETERANGAN",
+  SP: "SURAT PERINGATAN",
+  SPI: "SURAT PEMBERIAN IZIN",
+  SPK: "SURAT PERINTAH KERJA",
+  SPR: "SURAT PERNYATAAN",
+  SR: "SURAT REKOMENDASI",
+  SE: "SURAT EDARAN",
+  PNG: "PENUGASAN",
+  SERT: "SERTIFIKAT",
+  TAG: "TAGIHAN",
+  U: "UNDANGAN",
+  ST: "SURAT TEGURAN",
+  PQ: "MATERIAL REQUEST",
+  PJ: "PERSETUJUAN",
+  CL: "CONFIRMATION LETTER",
+};
+
+const divisions = {
+  MKT: "MARKETING & SALES",
+  FIN: "FINANCE",
+  CHC: "CORP & HUMAN CAPITAL",
+  PROD: "PRODUCT & ENGINEERING",
+  OPS: "OPERATION",
+  ITINFRA: "IT INFRA & SECURITY",
+  LGL: "LEGAL",
+  DIR: "DIREKSI",
+  ADMIN: "ADMIN",
+};
+
+const statuses = ["saved", "sent", "complete"];
 
 export default function Documents() {
   const [documents, setDocuments] = useState(null);
@@ -43,6 +100,7 @@ export default function Documents() {
 
   const [selectedDiv, setSelectedDiv] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedStat, setSelectedStat] = useState([]);
   // const [selectedStartDate, setSelectedStartDate] = useState(null);
   // const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -63,6 +121,14 @@ export default function Documents() {
     }
   };
 
+  const handleSelectStat = (key) => {
+    if (!selectedStat.includes(key)) {
+      setSelectedStat([key, ...selectedStat]);
+    } else {
+      setSelectedStat(selectedStat.filter((v) => v !== key));
+    }
+  };
+
   const handleFilter = async () => {
     setLoading(true);
     let qParam = "";
@@ -80,9 +146,16 @@ export default function Documents() {
       });
     }
 
+    if (selectedStat.length > 0) {
+      qParam += "&status=";
+      selectedStat.forEach((el, i) => {
+        qParam += el + ",";
+      });
+    }
+
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/documents/?status=sent${qParam}`,
+        `${process.env.REACT_APP_BASE_URL}/documents/?${qParam}`,
         {
           headers: {
             "x-access-token": localStorage.getItem("token"),
@@ -101,7 +174,7 @@ export default function Documents() {
   const fetchDocuments = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/documents/?status=sent`,
+        `${process.env.REACT_APP_BASE_URL}/documents/`,
         {
           headers: {
             "x-access-token": localStorage.getItem("token"),
@@ -178,7 +251,7 @@ export default function Documents() {
       await fetchDocuments();
     } catch (err) {
       alert(
-        `Terhadi kesalahan dalam menghapus dokumen. ${err.response?.data?.message}`,
+        `Terjadi kesalahan dalam menghapus dokumen. ${err.response?.data?.message}`,
       );
       await fetchDocuments();
     }
@@ -204,8 +277,10 @@ export default function Documents() {
     <main className="container mx-auto py-6 px-4 md:px-6">
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight">Sent</h1>
-          <p className="text-muted-foreground">Dokumen yang kamu kirim. </p>
+          <h1 className="text-3xl font-bold tracking-tight">Semua Dokumen</h1>
+          <p className="text-muted-foreground">
+            Daftar semua dokumen yang ada di DMS ini dari semua user.
+          </p>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 justify-between">
@@ -238,10 +313,10 @@ export default function Documents() {
               <TableRow>
                 <TableHead>Deskripsi</TableHead>
                 <TableHead>Nomor</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead>Divisi</TableHead>
                 <TableHead>Tipe</TableHead>
-                <TableHead>Kepada</TableHead>
-                <TableHead>Tanggal Kirim</TableHead>
+                <TableHead>Tanggal Upload</TableHead>
                 <TableHead className="w-[70px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -259,14 +334,33 @@ export default function Documents() {
                       <span className="font-medium">{document.title}</span>
                     </div>
                   </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        document.status === "saved"
+                          ? "success"
+                          : document.status === "sent"
+                            ? "warning"
+                            : document.status === "completed"
+                              ? "outline"
+                              : "secondary"
+                      }
+                      className={
+                        document.status === "saved"
+                          ? "bg-green-500/10 text-green-500 hover:bg-green-500/20 hover:text-green-600"
+                          : document.status === "sent"
+                            ? "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 hover:text-yellow-600"
+                            : document.status === "completed"
+                              ? "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20 hover:text-gray-600"
+                              : ""
+                      }
+                    >
+                      {document.status}
+                    </Badge>
+                  </TableCell>
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
-                  <TableCell>
-                    {document.receiver.data.map(
-                      (data) => data.user.username + ", ",
-                    )}
-                  </TableCell>
-                  <TableCell>{document.receiver.data[0].dateSent}</TableCell>
+                  <TableCell>{document.createdAt}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -321,21 +415,129 @@ export default function Documents() {
           </Table>
         </div>
       </div>
+
       <AuditModal
         audit={audit}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
 
-      <FilterModal
-        open={isFilterModalOpen}
-        onClose={() => setIsFilterModalOpen(false)}
-        handleFilter={handleFilter}
-        selectedTypes={selectedTypes}
-        selectedDiv={selectedDiv}
-        handleSelectType={handleSelectType}
-        handleSelectDiv={handleSelectDiv}
-      />
+      {isFilterModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50">
+          <div className="p-6 bg-background rounded-lg shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-semibold mb-4">Filter Dokumen</h2>
+
+            <div className="grid grid-cols-3">
+              <h4 className="font-semibold mb-2">Tipe Dokumen</h4>
+              <p></p>
+              <p></p>
+              {Object.keys(types).map((key) => (
+                <div key={key}>
+                  <label class="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      class="hidden peer"
+                      selected={selectedTypes.includes(key)}
+                      checked={selectedTypes.includes(key)}
+                      onChange={() => handleSelectType(key)}
+                    />
+                    <div class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-primary peer-checked:border-primary"></div>
+                    <span class="text-gray-700">{key}</span>
+                  </label>
+                </div>
+              ))}
+              <p></p>
+              <p></p>
+
+              <h4 className="font-semibold mb-2 mt-4">Divisi</h4>
+              <p></p>
+              <p></p>
+              {Object.keys(divisions).map((key) => (
+                <div key={key}>
+                  <label class="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      class="hidden peer"
+                      selected={selectedDiv.includes(key)}
+                      checked={selectedDiv.includes(key)}
+                      onChange={() => handleSelectDiv(key)}
+                    />
+                    <div class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-primary peer-checked:border-primary"></div>
+                    <span class="text-gray-700">{key}</span>
+                  </label>
+                </div>
+              ))}
+
+              <h4 className="font-semibold mb-2 mt-4">Status</h4>
+              <p></p>
+              <p></p>
+              {statuses.map((key) => (
+                <div key={key}>
+                  <label class="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      class="hidden peer"
+                      selected={selectedStat.includes(key)}
+                      checked={selectedStat.includes(key)}
+                      onChange={() => handleSelectStat(key)}
+                    />
+                    <div class="w-5 h-5 border-2 border-gray-400 rounded peer-checked:bg-primary peer-checked:border-primary"></div>
+                    <span class="text-gray-700">{key}</span>
+                  </label>
+                </div>
+              ))}
+            </div>
+
+            {/* TODO: date range is not implemented yet because it will get complexs, date range in draft or in completed will be different kind of date*/}
+            {/* <h4 className="font-semibold mb-2 mt-4">Tanggal</h4>
+            <div className="grid grid-cols-2 gap-x-2">
+              <div>
+                <p className="text-sm text-gray-600">Tanggal Mulai</p>
+                <DatePicker
+                  mode="single"
+                  selected={selectedStartDate}
+                  onSelect={setSelectedStartDate}
+                  placeHolder="Masukan Tanggal Mulai"
+                  className="rounded-md border bg-inherit p-1 w-full"
+                  classNames={{
+                    day_selected: "bg-blue-600 text-white",
+                    day_today: "text-blue-600 font-bold",
+                    day: "hover:bg-blue-100 rounded",
+                  }}
+                />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Tanggal Akhir</p>
+                <DatePicker
+                  mode="single"
+                  selected={selectedEndDate}
+                  onSelect={setSelectedEndDate}
+                  placeHolder="Masukan Tanggal Akhir"
+                  className="rounded-md border bg-inherit p-1 w-full"
+                  classNames={{
+                    day_selected: "bg-blue-600 text-white",
+                    day_today: "text-blue-600 font-bold",
+                    day: "hover:bg-blue-100 rounded",
+                  }}
+                />
+              </div>
+            </div>*/}
+
+            <div className="flex justify-end gap-2 pt-2 mt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsFilterModalOpen(false)}
+              >
+                Batal
+              </Button>
+              <Button type="submit" onClick={handleFilter}>
+                Filter
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
