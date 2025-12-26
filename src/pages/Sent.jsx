@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Select from "react-select";
 
 export default function Sent() {
   const [blobUrl, setblobUrl] = useState(null);
@@ -23,6 +24,11 @@ export default function Sent() {
   const containerRef = useRef();
   const location = useLocation();
   const { id, title } = location.state || {};
+
+  const options = users?.rows.map((user) => ({
+    label: `${user.username} (${user.email}, ${user.division})`,
+    value: user._id,
+  }));
 
   useEffect(() => {
     let isMounted = true;
@@ -133,13 +139,11 @@ export default function Sent() {
   }
 
   const sentRequest = async () => {
-    // TODO: quick hack
-    const cleanedSelectedUser = Object.values(selectedUser).filter(Boolean); // because "Pilih Penerima" dropdown option value is "", thus we need to filter out that.
-    if (Object.keys(cleanedSelectedUser).length !== count) {
-      alert(
-        `Tidak cocok! Jumlah penerima: ${Object.keys(cleanedSelectedUser).length}. Jumlah ttd: ${count}`,
-      );
-      return;
+    for (const key in selectedUser) {
+      if (selectedUser[key].length < 1) {
+        alert(`Urutan nomor ${key * 1 + 1} belum ada penerima!`);
+        return;
+      }
     }
 
     if (pointerPos.length === 0 || Object.keys(selectedUser).length < 1) {
@@ -161,12 +165,15 @@ export default function Sent() {
 
     for (const key in selectedUser) {
       const pos = pointerPos.filter((obj) => obj.count === key * 1); // i think its impossilbe an error will happen here. it will always match
-      data.push({
-        urutan: key * 1 + 1,
-        user: selectedUser[key],
-        dateSent,
-        pointer: pos[0],
-      });
+
+      for (const user of selectedUser[key]) {
+        data.push({
+          urutan: key * 1 + 1,
+          user: user,
+          dateSent,
+          pointer: pos[0],
+        });
+      }
     }
 
     try {
@@ -313,14 +320,29 @@ export default function Sent() {
             </h3>
             <span>Jumlah tanda tangan: {count}</span>
 
-            <div className="max-h-[60vh] overflow-y-auto space-y-2">
+            <div className="max-h-[80vh] min-h-[30vh] overflow-y-auto space-y-2">
               {count &&
                 [...Array(count)].map((val, i) => (
                   <div className="mb-4" key={i}>
                     <label className="mb-1 font-medium">
                       Pilih urutan ke {i + 1}:
                     </label>
-                    <select
+                    <Select
+                      isMulti
+                      options={options}
+                      value={options.filter((el) =>
+                        selectedUser[i]?.includes(el.value),
+                      )}
+                      onChange={(selected) => {
+                        const deepCopy = structuredClone(selectedUser);
+                        deepCopy[i] = selected.map((el) => el.value);
+                        setSelectedUser(deepCopy);
+                      }}
+                    />
+
+                    {/* <select
+                      multiple
+                      size={5}
                       onChange={(e) => (selectedUser[i] = e.target.value)}
                       defaultValue={selectedUser[i]}
                       required
@@ -333,7 +355,7 @@ export default function Sent() {
                             {`${user.username} (${user.email}, ${user.division})`}
                           </option>
                         ))}
-                    </select>
+                    </select>*/}
                   </div>
                 ))}
             </div>
