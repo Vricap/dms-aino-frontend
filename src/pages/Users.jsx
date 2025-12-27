@@ -49,7 +49,7 @@ export default function Documents() {
           },
         },
       );
-      setUsers(response.data);
+      setUsers(response.data.rows);
     } catch (err) {
       setError(`Gagal dalam load user. ${err.response?.data?.message}`);
     } finally {
@@ -120,7 +120,7 @@ export default function Documents() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 justify-between">
-          <div className="flex w-full md:w-1/2 items-center gap-2">
+          {/* <div className="flex w-full md:w-1/2 items-center gap-2">
             <div className="relative w-full">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
@@ -132,12 +132,15 @@ export default function Documents() {
             <Button variant="outline" size="icon">
               <Filter className="h-4 w-4" />
             </Button>
-          </div>
+          </div>*/}
           <Button onClick={handleOpenModal} className="flex items-center gap-2">
             <Plus className="h-4 w-4" /> Tambah User
           </Button>
         </div>
 
+        <span className="text-muted-foreground -mb-5 pl-1">
+          Jumlah: {users.length}
+        </span>
         <div className="rounded-md border">
           <Table>
             <TableHeader>
@@ -151,7 +154,7 @@ export default function Documents() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users.rows.map((user) => (
+              {users.map((user) => (
                 <TableRow key={user._id}>
                   <TableCell>
                     <div className="flex items-center gap-3">

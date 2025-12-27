@@ -309,6 +309,9 @@ export default function Documents() {
           </div>
         </div>
 
+        <span className="text-muted-foreground -mb-5 pl-1">
+          Jumlah: {documents.length}
+        </span>
         <div className="rounded-md border">
           <Table>
             <TableHeader>

@@ -250,6 +250,9 @@ export default function Documents() {
           </div>
         </div>
 
+        <span className="text-muted-foreground -mb-5 pl-1">
+          Jumlah: {documents.length}
+        </span>
         <div className="rounded-md border mb-4">
           <Table>
             <TableHeader>
@@ -352,6 +355,9 @@ export default function Documents() {
         <p className="text-muted-foreground">
           Seluruh dokumen yang <strong>pernah</strong> kamu tanda tangani:
         </p>
+        <span className="text-muted-foreground -mt-5 -mb-5">
+          Jumlah: {documentsSigned.length}
+        </span>
         <div className="rounded-md border">
           <Table>
             <TableHeader>
