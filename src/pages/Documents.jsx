@@ -295,7 +295,9 @@ export default function Documents() {
             </div>
             <Button
               variant={
-                selectedDiv.length > 0 || selectedTypes.length > 0
+                selectedDiv.length > 0 ||
+                selectedTypes.length > 0 ||
+                selectedStat.length > 0
                   ? ""
                   : "outline"
               }
