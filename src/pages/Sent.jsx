@@ -18,8 +18,8 @@ export default function Sent() {
   const [selectedUser, setSelectedUser] = useState({});
   const [count, setCount] = useState(0);
   const navigate = useNavigate();
-  // let signCounterRef = 1;
   const signCounterRef = useRef(1); // use ref so that the value persist at every render
+  const [draggingIndex, setDraggingIndex] = useState(null);
 
   const containerRef = useRef();
   const location = useLocation();
@@ -29,6 +29,51 @@ export default function Sent() {
     label: `${user.username} (${user.email}, ${user.division})`,
     value: user._id,
   }));
+
+  function screenToPdf(clientX, clientY) {
+    const bounds = containerRef.current.getBoundingClientRect();
+
+    const x = clientX - bounds.left;
+    const y = clientY - bounds.top;
+
+    const scaleX = pageDims.width / bounds.width;
+    const scaleY = pageDims.height / bounds.height;
+
+    return {
+      x: x * scaleX,
+      y: (bounds.height - y) * scaleY, // bottom-left origin
+    };
+  }
+
+  useEffect(() => {
+    function handleMouseMove(e) {
+      if (draggingIndex === null) return;
+
+      const { x, y } = screenToPdf(e.clientX, e.clientY);
+
+      setPointerPos((prev) => {
+        const updated = [...prev];
+        updated[draggingIndex] = {
+          ...updated[draggingIndex],
+          x,
+          y,
+        };
+        return updated;
+      });
+    }
+
+    function handleMouseUp() {
+      setDraggingIndex(null);
+    }
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [draggingIndex, pageDims]);
 
   useEffect(() => {
     let isMounted = true;
@@ -243,23 +288,23 @@ export default function Sent() {
               </Document>
 
               {/* TODO: pointerPos is now an array and EMPTY array is TRUTHY*/}
-              {pointerPos &&
-                pointerPos.map((pos, index) =>
-                  pos.page === pageNumber ? (
-                    <div
-                      className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center"
-                      style={{
-                        left: `${(pos.x / pageDims.width) * 100}%`,
-                        top: `${((pageDims.height - pos.y) / pageDims.height) * 100}%`,
-                        width: `${(pos.width / pageDims.width) * 100}%`,
-                        height: `${(pos.height / pageDims.height) * 100}%`,
-                        position: "absolute",
-                      }}
-                    >
-                      TTD Disini {pos.number}
-                    </div>
-                  ) : null,
-                )}
+              {pointerPos.map((pos, index) =>
+                pos.page === pageNumber ? (
+                  <div
+                    key={index}
+                    onMouseDown={() => setDraggingIndex(index)}
+                    className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center cursor-move select-none"
+                    style={{
+                      left: `${(pos.x / pageDims.width) * 100}%`,
+                      top: `${((pageDims.height - pos.y) / pageDims.height) * 100}%`,
+                      width: `${(pos.width / pageDims.width) * 100}%`,
+                      height: `${(pos.height / pageDims.height) * 100}%`,
+                    }}
+                  >
+                    TTD Disini {pos.number}
+                  </div>
+                ) : null,
+              )}
             </div>
           )}
 
