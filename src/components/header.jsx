@@ -12,8 +12,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Bell, LogOut, Settings, User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import AinoLogo from "../pages/assets/aino-login.png";
 
 export function Header() {
   const navigate = useNavigate();
@@ -62,10 +63,18 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <span className="font-bold text-xl">AINO DMS</span>
+          <Link to="/dashboard" className="flex flex-col">
+            <img
+              src={AinoLogo}
+              alt="AINO Payment Solution"
+              className="h-16 w-auto -mt-2"
+            />
+            <span className="text-xs text-muted-foreground -mt-4">
+              Document Management
+            </span>
           </Link>
         </div>
+
         <div className="flex items-center gap-2">
           {/* NO NOTIFICATION*/}
           {/* <Button variant="ghost" size="icon">

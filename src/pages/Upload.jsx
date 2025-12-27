@@ -107,7 +107,7 @@ const Upload = () => {
         <p className="text-muted-foreground">Upload dokumenmu.</p>
       </div>
 
-      <div className="max-w-md mx-auto mt-10 p-6 bg-background rounded-lg shadow-lg border-t-ring">
+      <div className="max-w-md mx-auto mt-5 p-6 bg-background rounded-lg shadow-lg border-t-ring">
         <h2 className="text-2xl font-bold mb-4">Form Upload</h2>
 
         {error && (
@@ -186,7 +186,7 @@ const Upload = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full bg-black text-white px-4 py-2 rounded hover:bg-black border border-t-green-300 ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`}
+            className={`w-full bg-black text-white px-4 py-2 rounded hover:bg-opacity-50 border border-gray-900 ${isLoading ? "opacity-75 cursor-not-allowed" : ""}`}
           >
             {isLoading ? "Uploading..." : "Upload Dokumen"}
           </button>
