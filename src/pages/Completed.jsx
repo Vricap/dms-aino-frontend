@@ -88,7 +88,17 @@ export default function Documents() {
           },
         },
       );
+      const r = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/documents/?signed=true${qParam}`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+          },
+        },
+      );
+
       setDocuments(response.data.rows);
+      setDocumentsSigned(r.data.rows);
     } catch (err) {
       setError(`Gagal dalam load dokumen. ${err.response?.data?.message}`);
     } finally {
@@ -110,14 +120,14 @@ export default function Documents() {
       setDocuments(response.data.rows);
 
       const r = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/documents/signed`,
+        `${process.env.REACT_APP_BASE_URL}/documents/?signed=true`,
         {
           headers: {
             "x-access-token": localStorage.getItem("token"),
           },
         },
       );
-      setDocumentsSigned(r.data);
+      setDocumentsSigned(r.data.rows);
     } catch (err) {
       setError(`Gagal dalam load dokumen. ${err.response?.data?.message}`);
     } finally {
