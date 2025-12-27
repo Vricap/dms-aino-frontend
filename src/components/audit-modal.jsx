@@ -29,7 +29,7 @@ export default function AuditModal({ audit, isOpen, onClose }) {
               {audit.receiver.map((el, i) => (
                 <div className="flex justify-between">
                   <p>
-                    {el.user.username} #{i + 1}
+                    {el.user.username} #{el.urutan}
                   </p>
                   <p>{el.dateSent}</p>
                 </div>
@@ -43,7 +43,7 @@ export default function AuditModal({ audit, isOpen, onClose }) {
                   el.signed && (
                     <div className="flex justify-between">
                       <p>
-                        {el.user.username} #{i + 1}
+                        {el.user.username} #{el.urutan}
                       </p>
                       <p>{el.dateSigned}</p>
                     </div>
