@@ -12,6 +12,7 @@ export default function View() {
   const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
   const [data, setData] = useState([]);
   const [current, setCurrent] = useState("");
+  const [signingMode, setSigningMode] = useState("");
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -53,6 +54,7 @@ export default function View() {
           if (isMounted) {
             const meta = JSON.parse(response.headers.get("X-Meta-Info"));
             setCurrent(meta.current);
+            setSigningMode(meta.signingMode);
             setData(meta.receiver);
           }
           setblobUrl(URL.createObjectURL(response.data));
@@ -131,7 +133,7 @@ export default function View() {
               Object.keys(data).length !== 0 &&
               data.pointer.page === pageNumber &&
               data.user === localStorage.getItem("id") &&
-              data.urutan === current &&
+              (signingMode === "sequential" ? data.urutan === current : true) &&
               !data.signed && (
                 <div
                   key={data.user._id}

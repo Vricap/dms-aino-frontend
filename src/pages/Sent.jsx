@@ -20,6 +20,7 @@ export default function Sent() {
   const navigate = useNavigate();
   const signCounterRef = useRef(1); // use ref so that the value persist at every render
   const [draggingIndex, setDraggingIndex] = useState(null);
+  const [signingMode, setSigningMode] = useState("sequential");
 
   const containerRef = useRef();
   const location = useLocation();
@@ -226,6 +227,7 @@ export default function Sent() {
         process.env.REACT_APP_BASE_URL + `/documents/${id}`,
         {
           data,
+          signingMode,
         },
         {
           headers: {
@@ -364,6 +366,36 @@ export default function Sent() {
               Pilih Penerima dan Tentukan Urutan
             </h3>
             <span>Jumlah tanda tangan: {count}</span>
+            <div className="space-y-2">
+              <label className="font-medium">Mode Tanda Tangan:</label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    value="sequential"
+                    checked={signingMode === "sequential"}
+                    onChange={() => {
+                      setSigningMode("sequential");
+                      // setSelectedUser([]);
+                    }}
+                  />
+                  Berurutan
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    value="parallel"
+                    checked={signingMode === "parallel"}
+                    onChange={() => {
+                      setSigningMode("parallel");
+                      // setSelectedUser([[]]); // only one step
+                    }}
+                  />
+                  Paralel
+                </label>
+              </div>
+            </div>
 
             <div className="max-h-[80vh] min-h-[30vh] overflow-y-auto space-y-2">
               {count &&
