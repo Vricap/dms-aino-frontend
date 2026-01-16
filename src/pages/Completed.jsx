@@ -33,7 +33,7 @@ import AuditModal from "../components/audit-modal.jsx";
 import FilterModal from "../components/filter-modal.jsx";
 
 export default function Documents() {
-  const [documents, setDocuments] = useState(null);
+  const [documents, setDocuments] = useState([]);
   const [documentsSigned, setDocumentsSigned] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -45,6 +45,19 @@ export default function Documents() {
   // const [selectedStartDate, setSelectedStartDate] = useState(null);
   // const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredDocuments = documents.filter((doc) => {
+    if (!searchQuery) return true;
+
+    const query = searchQuery.toLowerCase();
+
+    return (
+      doc.deskripsi?.toLowerCase().includes(query) ||
+      doc.content?.toLowerCase().includes(query) ||
+      doc.title?.toLowerCase().includes(query)
+    );
+  });
 
   const handleSelectType = (key) => {
     if (!selectedTypes.includes(key)) {
@@ -234,6 +247,8 @@ export default function Documents() {
                 type="search"
                 placeholder="Cari dokumen..."
                 className="w-full pl-8"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
             <Button
@@ -251,7 +266,7 @@ export default function Documents() {
         </div>
 
         <span className="text-muted-foreground -mb-5 pl-1">
-          Jumlah: {documents.length}
+          Jumlah: {filteredDocuments.length}
         </span>
         <div className="rounded-md border mb-4">
           <Table>
@@ -267,7 +282,7 @@ export default function Documents() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {documents.map((document) => (
+              {filteredDocuments.map((document) => (
                 <TableRow key={document._id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
