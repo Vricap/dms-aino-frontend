@@ -62,16 +62,12 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-0">
           <Link to="/dashboard" className="flex flex-col">
-            <img
-              src={AinoLogo}
-              alt="AINO Payment Solution"
-              className="h-16 w-auto -mt-2"
-            />
-            <span className="text-xs text-muted-foreground -mt-4">
+            <img src={AinoLogo} alt="AINO Payment Solution" className="w-24" />
+            {/* <span className="text-xs text-muted-foreground -mt-6">
               Document Management
-            </span>
+            </span>*/}
           </Link>
         </div>
 

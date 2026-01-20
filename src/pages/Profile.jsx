@@ -2,6 +2,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const divisions = {
+  MKT: "MARKETING & SALES",
+  FIN: "FINANCE",
+  CHC: "CORP & HUMAN CAPITAL",
+  PROD: "PRODUCT & ENGINEERING",
+  OPS: "OPERATION",
+  ITINFRA: "IT INFRA & SECURITY",
+  LGL: "LEGAL",
+  DIR: "DIREKSI",
+  ADMIN: "ADMIN",
+};
+
 export default function Profile() {
   const [signatureFile, setSignatureFile] = useState(null);
   const [imgUrl, setImgUrl] = useState("");
@@ -68,10 +80,17 @@ export default function Profile() {
   };
 
   const handleChange = (e) => {
-    setUserData({
-      ...userData,
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === "division") {
+      setUserData({
+        ...userData,
+        [e.target.name]: e.target.value.split(" ")[0],
+      });
+    } else {
+      setUserData({
+        ...userData,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -195,7 +214,7 @@ export default function Profile() {
             <input
               type="text"
               name="division"
-              value={userData.division}
+              value={`${userData.division} (${divisions[userData.division]})`}
               readOnly
               disabled
               placeholder="Masukan division baru"

@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { Search, Filter, User, Plus } from "lucide-react";
+import { User, Plus } from "lucide-react";
 
 const divisions = {
   MKT: "MARKETING & SALES",

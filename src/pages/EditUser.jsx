@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-const divisions = [
-  "MKT",
-  "FIN",
-  "CHC",
-  "PROD",
-  "OPS",
-  "ITINFRA",
-  "LGL",
-  "DIR",
-  "ADMIN",
-];
+const divisions = {
+  MKT: "MARKETING & SALES",
+  FIN: "FINANCE",
+  CHC: "CORP & HUMAN CAPITAL",
+  PROD: "PRODUCT & ENGINEERING",
+  OPS: "OPERATION",
+  ITINFRA: "IT INFRA & SECURITY",
+  LGL: "LEGAL",
+  DIR: "DIREKSI",
+  ADMIN: "ADMIN",
+};
 
 export default function Profile() {
   const [userData, setUserData] = useState({
@@ -156,9 +156,10 @@ export default function Profile() {
               required
             >
               <option value="">Pilih Divisi</option>
-              {divisions.map((div) => (
-                <option key={div} value={div}>
-                  {div}
+              {Object.keys(divisions).map((key) => (
+                <option key={key} value={key}>
+                  {/* {key.charAt(0).toUpperCase() + key.slice(1)}*/}
+                  {`${key} (${divisions[key]})`}
                 </option>
               ))}
             </select>
