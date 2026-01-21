@@ -280,9 +280,13 @@ export default function Documents() {
                   <TableCell>{document.division}</TableCell>
                   <TableCell>{document.type}</TableCell>
                   <TableCell>
-                    {document.receiver.data.map(
-                      (data) => data.user.username + ", ",
-                    )}
+                    {document.receiver.data.map((data) => {
+                      if (data.user) {
+                        return data.user?.username + ", ";
+                      } else {
+                        return "tidak ada, ";
+                      }
+                    })}
                   </TableCell>
                   <TableCell>{document.receiver.data[0].dateSent}</TableCell>
                   <TableCell>

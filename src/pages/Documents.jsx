@@ -168,7 +168,7 @@ export default function Documents() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/documents/?${qParam}`,
+        `${process.env.REACT_APP_BASE_URL}/documents/?list=true${qParam}`,
         {
           headers: {
             "x-access-token": localStorage.getItem("token"),
@@ -187,7 +187,7 @@ export default function Documents() {
   const fetchDocuments = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/documents/`,
+        `${process.env.REACT_APP_BASE_URL}/documents/?list=true`,
         {
           headers: {
             "x-access-token": localStorage.getItem("token"),

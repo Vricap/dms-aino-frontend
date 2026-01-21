@@ -29,7 +29,7 @@ export default function AuditModal({ audit, isOpen, onClose }) {
               {audit.receiver.map((el, i) => (
                 <div className="flex justify-between">
                   <p>
-                    {el.user.username} #{el.urutan}
+                    {el.user?.username || "Tidak ada"} #{el.urutan}
                   </p>
                   <p>{el.dateSent}</p>
                 </div>
@@ -43,7 +43,7 @@ export default function AuditModal({ audit, isOpen, onClose }) {
                   el.signed && (
                     <div className="flex justify-between">
                       <p>
-                        {el.user.username} #{el.urutan}
+                        {el.user?.username || "Tidak ada"} #{el.urutan}
                       </p>
                       <p>{el.dateSigned}</p>
                     </div>
@@ -55,7 +55,7 @@ export default function AuditModal({ audit, isOpen, onClose }) {
               <p>Dilihat Oleh:</p>
               {audit.views.map((el) => (
                 <div className="flex justify-between">
-                  <p>{el.user.username}</p>
+                  <p>{el.user?.username || "Tidak ada"}</p>
                   <p>{el.dateView}</p>
                 </div>
               ))}
@@ -65,7 +65,7 @@ export default function AuditModal({ audit, isOpen, onClose }) {
               <p>Didownload Oleh:</p>
               {audit.downloads.map((el) => (
                 <div className="flex justify-between">
-                  <p>{el.user.username}</p>
+                  <p>{el.user?.username || "Tidak ada"}</p>
                   <p>{el.dateDownload}</p>
                 </div>
               ))}
