@@ -7,7 +7,14 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { Send, Inbox, FileSignature, CheckCircle, Upload } from "lucide-react";
+import {
+  Send,
+  Inbox,
+  FileSignature,
+  CheckCircle,
+  Upload,
+  FileText,
+} from "lucide-react";
 import BarChart from "../components/bar-chart.jsx";
 
 export default function Dashboard() {
@@ -57,13 +64,11 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex flex-row items-center justify-between w-full">
-                <CardTitle className="text-sm font-medium">
-                  Dokumen Ter-upload
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Uploaded</CardTitle>
                 <Upload className="h-4 w-4 text-muted-foreground" />
               </div>
             </CardHeader>
@@ -77,9 +82,21 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex flex-row items-center justify-between w-full">
-                <CardTitle className="text-sm font-medium">
-                  Dokumen Dikirim
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Drafted</CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{dashboard.saved}</div>
+              {/* <p className="text-xs text-muted-foreground">
+                +8 from last month
+              </p>*/}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div className="flex flex-row items-center justify-between w-full">
+                <CardTitle className="text-sm font-medium">Sended</CardTitle>
                 <Send className="h-4 w-4 text-muted-foreground" />
               </div>
             </CardHeader>
@@ -93,9 +110,19 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex flex-row items-center justify-between w-full">
-                <CardTitle className="text-sm font-medium">
-                  Dokumen Inbox
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Signed</CardTitle>
+                <FileSignature className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{dashboard.signed}</div>
+              {/* <p className="text-xs text-muted-foreground">+5 from last week</p>*/}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div className="flex flex-row items-center justify-between w-full">
+                <CardTitle className="text-sm font-medium">Inbox</CardTitle>
                 <Inbox className="h-4 w-4 text-muted-foreground" />
               </div>
             </CardHeader>
@@ -109,29 +136,13 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex flex-row items-center justify-between w-full">
-                <CardTitle className="text-sm font-medium">
-                  Dokumen Complete
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Completed</CardTitle>
                 <CheckCircle className="h-4 w-4 text-muted-foreground" />
               </div>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{dashboard.complete}</div>
               {/* <p className="text-xs text-muted-foreground">+3 from last week</p>*/}
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div className="flex flex-row items-center justify-between w-full">
-                <CardTitle className="text-sm font-medium">
-                  Telah Menanda Tangani
-                </CardTitle>
-                <FileSignature className="h-4 w-4 text-muted-foreground" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{dashboard.signed}</div>
-              {/* <p className="text-xs text-muted-foreground">+5 from last week</p>*/}
             </CardContent>
           </Card>
         </div>

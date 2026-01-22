@@ -13,6 +13,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 export default function BarChart({ values }) {
   const colors = [
     "rgba(239, 68, 68, .7)", // red-500
+    "rgba(150, 75, 0, .7)", // brown
     "rgba(59, 130, 246, .7)", // blue-500
     "rgba(16, 185, 129, .7)", // green-500
     "rgba(245, 158, 11, .7)", // yellow-500
@@ -20,16 +21,17 @@ export default function BarChart({ values }) {
   ];
 
   const data = {
-    labels: ["Mengupload", "Mengirim", "Inbox", "Complete", "Menanda Tangani"],
+    labels: ["Uploaded", "Drafted", "Sended", "Signed", "Inbox", "Completed"],
     datasets: [
       {
         label: "Documents",
         data: [
           values.uploaded ?? 0,
+          values.saved ?? 0,
           values.sended ?? 0,
+          values.signed ?? 0,
           values.inbox ?? 0,
           values.complete ?? 0,
-          values.signed ?? 0,
         ],
         borderColor: "#d3dceb",
         backgroundColor: colors,
