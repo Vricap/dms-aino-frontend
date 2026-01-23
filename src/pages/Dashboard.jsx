@@ -74,6 +74,7 @@ export default function Dashboard() {
           </h1>
           <p className="text-muted-foreground">
             Platform untuk memanajemen, tanda tangan dan track dokumen PT. AINO.
+            Mendukung sequential dan parallel signing, serta multi user signing.
           </p>
         </div>
 
