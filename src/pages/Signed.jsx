@@ -17,21 +17,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
+import { Badge } from "../components/ui/badge";
 import {
   FileText,
-  // FileSignature,
   MoreHorizontal,
   Download,
-  Share,
   Trash,
   Search,
-  // Plus,
   Filter,
   Eye,
   History,
 } from "lucide-react";
-import { Badge } from "../components/ui/badge";
-
 import useAudit from "../hooks/useAudit.jsx";
 import AuditModal from "../components/audit-modal.jsx";
 import FilterModal from "../components/filter-modal.jsx";
@@ -97,13 +93,14 @@ export default function Documents() {
 
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/documents/?status=sent${qParam}`,
+        `${process.env.REACT_APP_BASE_URL}/documents/?status=complete${qParam}`,
         {
           headers: {
             "x-access-token": localStorage.getItem("token"),
           },
         },
       );
+
       setDocuments(response.data.rows);
     } catch (err) {
       setError(`Gagal dalam load dokumen. ${err.response?.data?.message}`);
@@ -116,7 +113,7 @@ export default function Documents() {
   const fetchDocuments = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/documents/?status=sent`,
+        `${process.env.REACT_APP_BASE_URL}/documents/?signed=true`,
         {
           headers: {
             "x-access-token": localStorage.getItem("token"),
@@ -182,32 +179,6 @@ export default function Documents() {
     }
   };
 
-  const deleteDoc = async (id) => {
-    const confirmed = window.confirm(
-      "Yakin ingin menghapus dokumen ini?\nDokumen tidak akan bisa diakses kembali.",
-    );
-    if (!confirmed) return;
-
-    try {
-      await axios.delete(`${process.env.REACT_APP_BASE_URL}/documents/${id}`, {
-        headers: {
-          "x-access-token": localStorage.getItem("token"),
-        },
-      });
-      alert("Dokumen berhasil di hapus!");
-      await fetchDocuments();
-    } catch (err) {
-      alert(
-        `Terhadi kesalahan dalam menghapus dokumen. ${err.response?.data?.message}`,
-      );
-      await fetchDocuments();
-    }
-  };
-
-  const handleSent = (id, title) => {
-    navigate("/sent", { state: { id: id, title: title } });
-  };
-
   useEffect(() => {
     fetchDocuments();
   }, []);
@@ -254,8 +225,10 @@ export default function Documents() {
       <div className="rounded-2xl bg-background shadow-sm border p-6 md:p-8">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-bold tracking-tight">Sent</h1>
-            <p className="text-muted-foreground">Dokumen yang kamu kirim. </p>
+            <h1 className="text-3xl font-bold tracking-tight">Signed</h1>
+            <p className="text-muted-foreground">
+              Seluruh dokumen yang pernah kamu tanda tangani.
+            </p>
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-muted/40 rounded-xl p-3 border">
@@ -309,8 +282,7 @@ export default function Documents() {
                   <TableHead>Status</TableHead>
                   <TableHead>Divisi</TableHead>
                   <TableHead>Tipe</TableHead>
-                  <TableHead>Kepada</TableHead>
-                  <TableHead>Tanggal Kirim</TableHead>
+                  <TableHead>Tanggal Complete</TableHead>
                   <TableHead className="w-[70px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -358,16 +330,7 @@ export default function Documents() {
                     </TableCell>
                     <TableCell>{document.division}</TableCell>
                     <TableCell>{document.type}</TableCell>
-                    <TableCell>
-                      {document.receiver.data.map((data) => {
-                        if (data.user) {
-                          return data.user?.username + ", ";
-                        } else {
-                          return "tidak ada, ";
-                        }
-                      })}
-                    </TableCell>
-                    <TableCell>{document.receiver.data[0].dateSent}</TableCell>
+                    <TableCell>{document.dateComplete}</TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -377,16 +340,6 @@ export default function Documents() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          {document.status !== "sent" && (
-                            <DropdownMenuItem
-                              onClick={() =>
-                                handleSent(document._id, document.title)
-                              }
-                            >
-                              <Share className="mr-2 h-4 w-4" />
-                              <span>Kirim</span>
-                            </DropdownMenuItem>
-                          )}
                           <DropdownMenuItem
                             onClick={() =>
                               viewDoc(document._id, document.title)
@@ -408,13 +361,6 @@ export default function Documents() {
                           >
                             <History className="mr-2 h-4 w-4" />
                             <span>Audit</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="text-red-600 focus:text-red-600"
-                            onClick={() => deleteDoc(document._id)}
-                          >
-                            <Trash className="mr-2 h-4 w-4" />
-                            <span>Hapus</span>
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

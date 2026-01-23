@@ -4,124 +4,91 @@ import { cn } from "../lib/utils";
 import {
   FileText,
   FileSignature,
-  // Users,
-  // Settings,
   LayoutDashboard,
   FolderOpen,
-  // History,
   UploadIcon,
   FileCheck,
   User,
   FileBox,
+  Send,
 } from "lucide-react";
 
-const sidebarItems = [
-  {
-    title: "Dashboard",
-    href: "/",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Upload",
-    href: "/upload",
-    icon: UploadIcon,
-  },
-  {
-    title: "Draft",
-    href: "/draft",
-    icon: FileText,
-  },
-  {
-    title: "Sent",
-    href: "/send",
-    icon: FileSignature,
-  },
-  {
-    title: "Inbox",
-    href: "/inbox",
-    icon: FolderOpen,
-  },
-  {
-    title: "Completed",
-    href: "/completed",
-    icon: FileCheck,
-  },
-  // {
-  //   title: "Signatures",
-  //   href: "/signatures",
-  //   icon: FileSignature,
-  // },
-  // {
-  //   title: "Audit Trail",
-  //   href: "/audit",
-  //   icon: History,
-  // },
-  // {
-  //   title: "Users",
-  //   href: "/users",
-  //   icon: Users,
-  // },
-  // {
-  //   title: "Settings",
-  //   href: "/settings",
-  //   icon: Settings,
-  // },
+const mainItems = [
+  { title: "Dashboard", href: "/", icon: LayoutDashboard },
+  { title: "Upload", href: "/upload", icon: UploadIcon },
+];
+
+const documentItems = [
+  { title: "Draft", href: "/draft", icon: FileText },
+  { title: "Sent", href: "/send", icon: Send },
+  { title: "Inbox", href: "/inbox", icon: FolderOpen },
+  { title: "Completed", href: "/completed", icon: FileCheck },
+  { title: "Signed", href: "/signed", icon: FileSignature },
 ];
 
 export function Sidebar() {
   const location = useLocation();
+  const isAdmin = localStorage.getItem("role") === "admin";
+
+  const renderLink = (item) => (
+    <Link
+      key={item.href}
+      to={item.href}
+      className={cn(
+        "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition",
+        "hover:bg-accent hover:text-accent-foreground",
+        location.pathname === item.href
+          ? "bg-accent text-accent-foreground"
+          : "text-muted-foreground",
+      )}
+    >
+      {location.pathname === item.href && (
+        <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r bg-primary" />
+      )}
+      <item.icon className="h-5 w-5" />
+      {item.title}
+    </Link>
+  );
 
   return (
-    <div className="hidden border-r bg-background md:block w-64">
-      <div className="flex h-full flex-col gap-2 p-4">
-        <nav className="grid gap-1 px-2 pt-2">
-          {sidebarItems.map((item, index) => (
-            <Link
-              key={index}
-              to={item.href}
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                location.pathname === item.href
-                  ? "bg-accent text-accent-foreground"
-                  : "transparent",
-              )}
-            >
-              <item.icon className="h-5 w-5" />
-              {item.title}
-            </Link>
-          ))}
-          {localStorage.getItem("role") === "admin" && (
-            <Link
-              key={sidebarItems.length - 1}
-              to="/users"
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                location.pathname === "/users"
-                  ? "bg-accent text-accent-foreground"
-                  : "transparent",
-              )}
-            >
-              <User className="h-5 w-5" />
-              Users
-            </Link>
-          )}
-          {localStorage.getItem("role") === "admin" && (
-            <Link
-              key={sidebarItems.length}
-              to="/documents"
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                location.pathname === "/documents"
-                  ? "bg-accent text-accent-foreground"
-                  : "transparent",
-              )}
-            >
-              <FileBox className="h-5 w-5" />
-              Documents
-            </Link>
-          )}
-        </nav>
+    <aside className="hidden md:flex h-screen w-64 flex-col border-r bg-background">
+      {/* Header */}
+      <div className="flex items-center gap-3 px-4 py-3 border-b">
+        <div className="h-9 w-9 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold">
+          D
+        </div>
+        <div>
+          <p className="font-semibold">DMS</p>
+          <p className="text-xs text-muted-foreground">PT. AINO</p>
+        </div>
       </div>
-    </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-2 py-4 space-y-2">
+        <p className="px-3 text-xs font-semibold text-muted-foreground uppercase">
+          Main
+        </p>
+        {mainItems.map(renderLink)}
+
+        <p className="px-3 pt-4 text-xs font-semibold text-muted-foreground uppercase">
+          Documents
+        </p>
+        {documentItems.map(renderLink)}
+
+        {isAdmin && (
+          <>
+            <p className="px-3 pt-4 text-xs font-semibold text-muted-foreground uppercase">
+              Admin
+            </p>
+            {renderLink({ title: "Users", href: "/users", icon: User })}
+            {renderLink({
+              title: "Documents",
+              href: "/documents",
+              icon: FileBox,
+            })}
+          </>
+        )}
+      </nav>
+    </aside>
   );
 }

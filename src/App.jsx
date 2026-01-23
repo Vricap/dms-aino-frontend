@@ -25,6 +25,7 @@ import View from "./pages/View.jsx";
 import Profile from "./pages/Profile.jsx";
 import Users from "./pages/Users.jsx";
 import Documents from "./pages/Documents.jsx";
+import Signed from "./pages/Signed.jsx";
 import EditUser from "./pages/EditUser.jsx";
 import ProtectedRoute from "./components/protected-routes.jsx";
 
@@ -84,6 +85,14 @@ function Layout() {
               element={
                 <ProtectedRoute>
                   <Completed />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/signed"
+              element={
+                <ProtectedRoute>
+                  <Signed />
                 </ProtectedRoute>
               }
             />

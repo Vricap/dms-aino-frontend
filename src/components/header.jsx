@@ -84,16 +84,19 @@ export function Header() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
-                  variant="ghost"
-                  className="relative h-8 w-8 rounded-full"
+                  // variant="ghost"
+                  className="h-8 w-8 rounded-full"
                 >
-                  <Avatar className="h-8 w-8">
+                  {/* <Avatar className="h-8 w-8">
                     <AvatarImage
                       src="/placeholder.svg?height=32&width=32"
                       alt="User"
                     />
                     <AvatarFallback>AI</AvatarFallback>
-                  </Avatar>
+                  </Avatar>*/}
+                  <div className="bg-primary text-primary-foreground flex items-center justify-center text-xl font-bold">
+                    {username?.charAt(0).toUpperCase()}
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>

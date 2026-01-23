@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+
+import { Button } from "../components/ui/button";
 
 const divisions = {
   MKT: "MARKETING & SALES",
@@ -122,130 +130,161 @@ export default function Profile() {
 
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
-      <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
-      <p className="text-muted-foreground mb-4">Profil mengenai dirimu.</p>
-      <h2 className="text-lg font-bold">Tanda tanganmu:</h2>
-      <div className="flex flex-col md:flex-row gap-6 items-start mx-auto mb-4">
-        {imgUrl ? (
-          <img
-            alt="user signature"
-            src={imgUrl}
-            className="bg-white p-2 rounded"
-          ></img>
-        ) : (
-          <span>
-            <em>
-              Gambar tanda tangan tidak ditemukan. Coba upload gambar tanda
-              tanganmu.
-            </em>
-          </span>
-        )}
-        <form onSubmit={handleSignatureSubmit} className="flex-1">
-          <div className="mb-4">
-            <label className="block mb-1 font-medium">
-              Upload gambar tanda tangan (jpg, png):
-            </label>
-            <input
-              type="file"
-              accept=".jpg,.png"
-              onChange={(e) => setSignatureFile(e.target.files[0])}
-              required
-              className="block w-full border border-gray-300 rounded px-3 py-2"
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-          >
-            Upload
-          </button>
-        </form>
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-6">
+        <div className="h-14 w-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xl font-bold">
+          {userData.username?.charAt(0).toUpperCase()}
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {userData.username}
+          </h1>
+          <p className="text-muted-foreground">
+            {divisions[userData.division]} • {userData.role}
+          </p>
+        </div>
       </div>
 
-      {/* <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">*/}
-      <div className="w-full rounded-lg shadow-md mt-8">
-        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-          {/* Username */}
-          <div>
-            <label className="block font-medium mb-1">Username</label>
-            <input
-              type="text"
-              name="username"
-              placeholder="Masukan username baru"
-              value={userData.username}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            />
-          </div>
+      {/* Signature */}
+      <div className="mt-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Tanda Tangan Digital</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Digunakan untuk menandatangani dokumen secara elektronik
+            </p>
+          </CardHeader>
 
-          {/* Email */}
-          <div>
-            <label className="block font-medium mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Masukan email baru"
-              readOnly
-              disabled
-              value={userData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            />
-          </div>
+          <CardContent className="grid gap-6 md:grid-cols-2">
+            {/* Preview */}
+            <div className="flex items-center justify-center border rounded-lg bg-muted min-h-[160px]">
+              {imgUrl ? (
+                <img
+                  src={imgUrl}
+                  alt="Signature"
+                  className="max-h-32 object-contain bg-white p-2 rounded"
+                />
+              ) : (
+                <p className="text-sm text-muted-foreground text-center">
+                  Belum ada tanda tangan <br /> Silakan upload
+                </p>
+              )}
+            </div>
 
-          {/* Role */}
-          <div>
-            <label className="block font-medium mb-1">Role</label>
-            <input
-              type="text"
-              name="role"
-              placeholder="Masukan role baru"
-              readOnly
-              disabled
-              value={userData.role}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            />
-          </div>
+            {/* Upload */}
+            <form onSubmit={handleSignatureSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Upload Tanda Tangan
+                </label>
+                <input
+                  type="file"
+                  accept=".jpg,.png"
+                  onChange={(e) => setSignatureFile(e.target.files[0])}
+                  className="block w-full text-sm border rounded-md file:mr-4 file:py-2 file:px-4
+                             file:rounded-md file:border-0
+                             file:bg-muted file:text-foreground
+                             hover:file:bg-accent"
+                />
+              </div>
 
-          {/* Division */}
-          <div>
-            <label className="block font-medium mb-1">Division</label>
-            <input
-              type="text"
-              name="division"
-              value={`${userData.division} (${divisions[userData.division]})`}
-              readOnly
-              disabled
-              placeholder="Masukan division baru"
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            />
-          </div>
-
-          {/* New Password */}
-          <div>
-            <label className="block font-medium mb-1">New Password</label>
-            <input
-              type="text"
-              name="newPassword"
-              value={userData.newPassword}
-              placeholder="Masukan password baru"
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            />
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white py-4 px-4 rounded-md hover:bg-indigo-700 transition col-span-full"
-          >
-            Simpan Perubahan
-          </button>
-        </form>
+              <Button type="submit" className="w-full">
+                Upload Tanda Tangan
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </div>
-      {/* </div>*/}
+
+      {/* Account + Security */}
+      <form onSubmit={handleSubmit}>
+        <div className="grid gap-6 md:grid-cols-2 mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Informasi Akun</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Informasi dasar akun pengguna
+              </p>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  value={userData.username}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border rounded-md dark:text-black"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Email</label>
+                <input
+                  type="email"
+                  value={userData.email}
+                  disabled
+                  className="w-full px-4 py-2 border rounded-md bg-muted"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Role</label>
+                  <input
+                    value={userData.role}
+                    disabled
+                    className="w-full px-4 py-2 border rounded-md bg-muted"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Division
+                  </label>
+                  <input
+                    value={`${userData.division} (${divisions[userData.division]})`}
+                    disabled
+                    className="w-full px-4 py-2 border rounded-md bg-muted"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Keamanan</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Kelola keamanan akun Anda
+              </p>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Password Baru
+                </label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={userData.newPassword}
+                  onChange={handleChange}
+                  placeholder="Masukkan password baru"
+                  className="w-full px-4 py-2 border rounded-md dark:text-black"
+                />
+              </div>
+
+              <Button type="submit" className="w-full">
+                Simpan Perubahan
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </form>
     </main>
   );
 }

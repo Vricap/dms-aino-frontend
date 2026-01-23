@@ -88,106 +88,128 @@ export default function Profile() {
 
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
-      <h1 className="text-3xl font-bold tracking-tight">Edit User</h1>
-      <p className="text-muted-foreground mb-4">
-        Update username, email, role, divisi atau password dari User.
-      </p>
-
-      {/* <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">*/}
-      <div className="w-full rounded-lg shadow-md mt-8">
-        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-          {/* Username */}
-          <div>
-            <label className="block font-medium mb-1">Username</label>
-            <input
-              type="text"
-              name="username"
-              placeholder="Masukan username baru"
-              required
-              value={userData.username}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            />
-          </div>
-
-          {/* Email */}
-          <div>
-            <label className="block font-medium mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Masukan email baru"
-              required
-              value={userData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            />
-          </div>
-
-          {/* Role */}
-          <div>
-            <label className="block font-medium mb-1">Role</label>
-            <select
-              name="role"
-              required
-              value={userData.role}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            >
-              <option value="">Pilih Role</option>
-              <option key="admin" value="admin">
-                ADMIN
-              </option>
-
-              <option key="user" value="user">
-                USER
-              </option>
-            </select>
-          </div>
-
-          {/* Division */}
-          <div>
-            <label className="block font-medium mb-1">Division</label>
-            <select
-              name="division"
-              value={userData.division}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-              required
-            >
-              <option value="">Pilih Divisi</option>
-              {Object.keys(divisions).map((key) => (
-                <option key={key} value={key}>
-                  {/* {key.charAt(0).toUpperCase() + key.slice(1)}*/}
-                  {`${key} (${divisions[key]})`}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* New Password */}
-          <div>
-            <label className="block font-medium mb-1">New Password</label>
-            <input
-              type="text"
-              name="newPassword"
-              value={userData.newPassword}
-              placeholder="Masukan password baru"
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
-            />
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white py-4 px-4 rounded-md hover:bg-indigo-700 transition col-span-full"
-          >
-            Simpan Perubahan
-          </button>
-        </form>
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Edit User</h1>
+        <p className="text-muted-foreground mt-1">
+          Update informasi akun dan hak akses user.
+        </p>
       </div>
-      {/* </div>*/}
+
+      {/* Card */}
+      <div className="flex justify-center">
+        <div className="w-full max-w-3xl rounded-2xl border bg-background shadow-sm">
+          <form onSubmit={handleSubmit} className="flex flex-col divide-y">
+            {/* === BASIC INFO === */}
+            <section className="p-6">
+              <h2 className="text-lg font-semibold mb-4">Informasi Dasar</h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium">Username</label>
+                  <input
+                    type="text"
+                    name="username"
+                    value={userData.username}
+                    onChange={handleChange}
+                    required
+                    className="mt-1 w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-primary dark:text-black"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={userData.email}
+                    onChange={handleChange}
+                    required
+                    className="mt-1 w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-primary dark:text-black"
+                  />
+                </div>
+              </div>
+            </section>
+
+            {/* === ACCESS CONTROL === */}
+            <section className="p-6">
+              <h2 className="text-lg font-semibold mb-4">Hak Akses</h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium">Role</label>
+                  <select
+                    name="role"
+                    value={userData.role}
+                    onChange={handleChange}
+                    required
+                    className="mt-1 w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-primary dark:text-black"
+                  >
+                    <option value="">Pilih Role</option>
+                    <option value="admin">ADMIN</option>
+                    <option value="user">USER</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Divisi</label>
+                  <select
+                    name="division"
+                    value={userData.division}
+                    onChange={handleChange}
+                    required
+                    className="mt-1 w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-primary dark:text-black"
+                  >
+                    <option value="">Pilih Divisi</option>
+                    {Object.keys(divisions).map((key) => (
+                      <option key={key} value={key}>
+                        {`${key} (${divisions[key]})`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            {/* === SECURITY === */}
+            <section className="p-6 bg-muted/30">
+              <h2 className="text-lg font-semibold mb-1">Keamanan</h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                Kosongkan jika tidak ingin mengganti password.
+              </p>
+
+              <div className="max-w-sm">
+                <label className="text-sm font-medium">Password Baru</label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={userData.newPassword}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  className="mt-1 w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-destructive dark:text-black"
+                />
+              </div>
+            </section>
+
+            {/* === ACTIONS === */}
+            <div className="flex justify-end gap-3 p-6 bg-background">
+              <button
+                type="button"
+                onClick={() => navigate("/users")}
+                className="rounded-md border px-4 py-2 text-sm hover:bg-muted transition"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                className="rounded-md bg-primary px-6 py-2 text-sm font-medium text-white hover:bg-primary/90 transition dark:text-black"
+              >
+                Simpan Perubahan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </main>
   );
 }
