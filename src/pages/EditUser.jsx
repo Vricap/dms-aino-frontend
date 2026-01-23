@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { MoveLeft } from "lucide-react";
 
 const divisions = {
   MKT: "MARKETING & SALES",
@@ -88,6 +89,14 @@ export default function Profile() {
 
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
+      <div
+        className="flex items-center cursor-pointer mb-4"
+        onClick={() => navigate(-1)}
+      >
+        <MoveLeft className="text-muted-foreground italic" />
+        <span className="text-muted-foreground italic">Kembali</span>
+      </div>
+
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Edit User</h1>

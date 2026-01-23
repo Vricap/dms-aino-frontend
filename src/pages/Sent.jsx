@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { MoveLeft } from "lucide-react";
 
 export default function Sent() {
   const [blobUrl, setblobUrl] = useState(null);
@@ -131,7 +132,12 @@ export default function Sent() {
   }, [id]);
 
   if (loading) {
-    return <p className="p-4">Loading documents...</p>;
+    <div className="flex h-[60vh] items-center justify-center text-muted-foreground">
+      <div className="flex flex-col items-center gap-2">
+        <span className="animate-spin text-2xl">📄</span>
+        <span>Memuat dokumen...</span>
+      </div>
+    </div>;
   }
 
   if (error) {
@@ -244,6 +250,13 @@ export default function Sent() {
 
   return (
     <main className="container mx-auto py-6 px-4 md:px-6">
+      <div
+        className="flex items-center cursor-pointer mb-4"
+        onClick={() => navigate(-1)}
+      >
+        <MoveLeft className="text-muted-foreground italic" />
+        <span className="text-muted-foreground italic">Kembali</span>
+      </div>
       <div className="flex flex-col gap-6">
         <div className="space-y-2">
           <h2 className="text-lg font-bold">Tempatkan Letak Tanda Tangan</h2>
@@ -280,14 +293,30 @@ export default function Sent() {
               onDrop={handleDrop}
               style={{ minHeight: 400 }}
             >
-              <Document file={blobUrl} onLoadSuccess={onDocumentLoadSuccess}>
-                <Page
-                  pageNumber={pageNumber}
-                  onRenderSuccess={onPageRenderSuccess}
-                  renderAnnotationLayer={false}
-                  renderTextLayer={false}
-                />
-              </Document>
+              <div className="flex justify-center">
+                <div
+                  className="
+                    relative
+                    bg-white
+                    rounded-xl
+                    shadow-xl shadow-black/20
+                    border
+                    overflow-hidden
+                  "
+                >
+                  <Document
+                    file={blobUrl}
+                    onLoadSuccess={onDocumentLoadSuccess}
+                  >
+                    <Page
+                      pageNumber={pageNumber}
+                      onRenderSuccess={onPageRenderSuccess}
+                      renderAnnotationLayer={false}
+                      renderTextLayer={false}
+                    />
+                  </Document>
+                </div>
+              </div>
 
               {/* TODO: pointerPos is now an array and EMPTY array is TRUTHY*/}
               {pointerPos.map((pos, index) =>
@@ -295,7 +324,18 @@ export default function Sent() {
                   <div
                     key={index}
                     onMouseDown={() => setDraggingIndex(index)}
-                    className="absolute border-2 border-blue-500 bg-blue-200 bg-opacity-25 text-blue-700 flex justify-center items-center cursor-move select-none"
+                    className="
+                        absolute
+                        border-2 border-dashed border-blue-500
+                        bg-blue-500/10
+                        rounded-lg
+                        flex flex-col items-center justify-center
+                        text-blue-600
+                        font-semibold
+                        text-sm
+                        animate-pulse
+                        cursor-pointer
+                      "
                     style={{
                       left: `${(pos.x / pageDims.width) * 100}%`,
                       top: `${((pageDims.height - pos.y) / pageDims.height) * 100}%`,
@@ -303,7 +343,8 @@ export default function Sent() {
                       height: `${(pos.height / pageDims.height) * 100}%`,
                     }}
                   >
-                    TTD Disini {pos.number}
+                    ✍️
+                    <span>TTD di sini {pos.number}</span>
                   </div>
                 ) : null,
               )}
@@ -312,23 +353,34 @@ export default function Sent() {
 
           <div className="flex justify-between">
             <div></div>
-            <div className="flex space-x-2 p-2">
+            <div
+              className="
+                absolute bottom-4 left-1/2 -translate-x-1/2
+                flex items-center gap-4
+                rounded-full
+                bg-black/70 backdrop-blur
+                px-4 py-2
+                text-white text-sm
+                shadow-lg
+              "
+              draggable="true"
+            >
               <button
                 disabled={pageNumber <= 1}
-                onClick={() => {
-                  return setPageNumber((p) => p - 1);
-                }}
+                onClick={() => setPageNumber((p) => p - 1)}
+                className="disabled:opacity-40 hover:text-blue-300 transition"
               >
                 ⬅️
               </button>
+
               <span>
-                Halaman {pageNumber} / {numPages}
+                {pageNumber} / {numPages}
               </span>
+
               <button
                 disabled={pageNumber >= numPages}
-                onClick={() => {
-                  return setPageNumber((p) => p + 1);
-                }}
+                onClick={() => setPageNumber((p) => p + 1)}
+                className="disabled:opacity-40 hover:text-blue-300 transition"
               >
                 ➡️
               </button>
