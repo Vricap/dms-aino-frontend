@@ -55,7 +55,7 @@ export function Sidebar() {
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b">
         <div className="h-9 w-9 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold">
-          D
+          Đ
         </div>
         <div>
           <p className="font-semibold">DMS</p>

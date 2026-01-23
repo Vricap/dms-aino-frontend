@@ -38,8 +38,6 @@ export default function Dashboard() {
         },
       );
       setDashboard(response.data.data);
-      console.log(period);
-      console.log(response.data.data);
     } catch (err) {
       setError(`Gagal dalam load dashboard. ${err.response?.data?.message}`);
     } finally {

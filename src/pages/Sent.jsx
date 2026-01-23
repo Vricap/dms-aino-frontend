@@ -95,9 +95,27 @@ export default function Sent() {
           setblobUrl(URL.createObjectURL(response.data));
         }
       } catch (err) {
-        // TODO: since we tell axios to always treat all response as blob, if server response an json error, we cant read the error message
+        // TODO: since we tell axios to always treat all response as blob, if server response an json error, we have to parse it first
         if (isMounted) {
-          setError(`Gagal dalam load dokumen. ${err.message}`);
+          let errorMessage = "Gagal dalam memuat dokumen.";
+
+          if (
+            err.response?.data instanceof Blob &&
+            err.response?.data?.type === "application/json"
+          ) {
+            try {
+              const text = await err.response.data.text();
+              const json = JSON.parse(text);
+              errorMessage += ` ${json.message ?? ""}`;
+            } catch (e) {
+              // fallback if blob is not JSON
+              errorMessage += " Unable to parse error response.";
+            }
+          } else {
+            errorMessage += ` ${err.response?.data?.message ?? ""}`;
+          }
+
+          setError(errorMessage);
         }
       } finally {
         if (isMounted) {
