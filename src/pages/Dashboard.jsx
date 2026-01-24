@@ -73,8 +73,11 @@ export default function Dashboard() {
             Document Management System
           </h1>
           <p className="text-muted-foreground">
-            Platform untuk memanajemen, tanda tangan dan track dokumen PT. AINO.
-            Mendukung sequential dan parallel signing, serta multi user signing.
+            Platform manajemen dokumen PT. AINO yang memungkinkan pembuatan,
+            penandatanganan, dan pelacakan dokumen secara digital. <br></br>
+            Mendukung alur tanda tangan <strong>sequential</strong> dan{" "}
+            <strong>parallel</strong>, termasuk
+            <strong>multi-user signing</strong>dalam satu tahapan.
           </p>
         </div>
 
