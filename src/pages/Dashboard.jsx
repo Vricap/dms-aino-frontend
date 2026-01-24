@@ -74,10 +74,9 @@ export default function Dashboard() {
           </h1>
           <p className="text-muted-foreground">
             Platform manajemen dokumen PT. AINO yang memungkinkan pembuatan,
-            penandatanganan, dan pelacakan dokumen secara digital. <br></br>
-            Mendukung alur tanda tangan <strong>sequential</strong> dan{" "}
-            <strong>parallel</strong>, termasuk
-            <strong>multi-user signing</strong>dalam satu tahapan.
+            penandatanganan, dan pelacakan dokumen secara digital, dengan
+            dukungan <strong>sequential</strong>, <strong>parallel</strong>, dan{" "}
+            <strong>group signing</strong>.
           </p>
         </div>
 
