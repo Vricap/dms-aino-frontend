@@ -54,6 +54,19 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black px-4">
       <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-8 text-white">
+
+      { alert(`List user:
+      Admin:
+      	username: admin, password: 123
+      
+      User biasa:
+      	username: vrica, password: 123
+      	username: sari, password: 123
+      	username: faiz, password: 123
+      	username: afifa, password: 123
+      	username: lala, password: 123
+      	`) }
+      	
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <img
